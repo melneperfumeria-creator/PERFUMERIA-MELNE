@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MELNE Perfumes & Esencias - Catálogo Ejecutivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-blue: #0B2447;
+            --secondary-blue: #19376D;
+            --light-blue: #E8F1F8;
+            --dark-blue: #05162B;
+            --white: #ffffff;
+            --black: #111827;
+            --gray: #4B5563;
+            --light-gray: #F9FAFB;
+            --gold-accent: #C5A059;
+        }
+
+        body { background-color: var(--light-gray); color: var(--black); font-family: 'Montserrat', sans-serif; line-height: 1.6; }
+        h1, h2, h3, .logo-text h1 { font-family: 'Playfair Display', serif; }
+
+        /* ========== HEADER ========== */
+        header { background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%); color: var(--white); position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+        .header-container { max-width: 1200px; margin: 0 auto; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; min-height: 80px; }
+        .logo { display: flex; align-items: center; gap: 1rem; }
+        .logo-icon { width: 60px; height: 60px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.2); flex-shrink: 0; border: 1px solid rgba(255,255,255,0.5); }
+        .logo-icon img { width: 90%; height: 90%; object-fit: contain; }
+        .logo-text h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 3px; color: var(--white); line-height: 1; margin: 0; }
+        .logo-text p { font-size: 0.7rem; letter-spacing: 4px; color: var(--gold-accent); font-weight: 500; text-transform: uppercase; margin: 4px 0 0 0; }
+        .contact-info p { font-size: 0.9rem; font-weight: 500; color: var(--white); }
+        .contact-info i { margin-right: 0.4rem; color: var(--gold-accent); }
+
+        /* ========== NAVIGATION ========== */
+        nav { background: var(--white); position: fixed; top: 80px; left: 0; width: 100%; z-index: 999; border-bottom: 2px solid var(--primary-blue); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .nav-links { display: flex; list-style: none; justify-content: center; gap: 1rem; }
+        .nav-links a { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.8rem; text-decoration: none; color: var(--black); font-weight: 600; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s ease; border-bottom: 3px solid transparent; }
+        .nav-links a:hover { background: var(--light-blue); color: var(--primary-blue); }
+        .nav-links a.active { color: var(--primary-blue); border-bottom-color: var(--gold-accent); background: var(--light-blue); }
+        .nav-links i { font-size: 0.9rem; }
+
+        /* ========== MAIN CONTENT ========== */
+        main { margin-top: 140px; padding: 3rem 2rem; max-width: 1200px; margin-left: auto; margin-right: auto; min-height: 60vh; }
+        .section-title { text-align: center; margin-bottom: 3rem; color: var(--primary-blue); font-size: 2.5rem; position: relative; padding-bottom: 1rem; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: var(--gold-accent); }
+        .category-section { display: none; animation: fadeIn 0.6s ease; }
+        .category-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ========== PRODUCTS GRID ========== */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 2rem; }
+        .product-card { background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(11, 36, 71, 0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(0,0,0,0.04); display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-6px); box-shadow: 0 12px 25px rgba(11, 36, 71, 0.15); }
+        .product-image { height: 240px; background: linear-gradient(145deg, var(--light-blue) 0%, var(--white) 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .product-card:hover .product-image img { transform: scale(1.05); }
+        .product-image i { font-size: 4.5rem; color: var(--primary-blue); opacity: 0.7; }
+        .product-badge { position: absolute; top: 12px; right: 12px; background: var(--primary-blue); color: var(--white); padding: 0.3rem 0.8rem; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; z-index: 1; }
+        .product-info { padding: 1.5rem; text-align: center; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-name { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--primary-blue); letter-spacing: 0.5px; }
+        .product-description { color: var(--gray); font-size: 0.82rem; margin-bottom: 1.2rem; line-height: 1.5; font-weight: 400; flex-grow: 1; }
+        .product-price { font-size: 1.3rem; font-weight: 700; color: var(--black); display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding-top: 1rem; border-top: 1px solid var(--light-blue); }
+        .product-price i { font-size: 0.95rem; color: var(--gold-accent); }
+
+        /* Botón Agregar al Carrito */
+        .btn-agregar {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .btn-agregar:hover { background: var(--gold-accent); color: var(--dark-blue); }
+        .btn-agregar:active { transform: scale(0.98); }
+
+        /* ========== INICIO CARDS ========== */
+        .inicio-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .inicio-card { background: var(--white); padding: 2.5rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(11, 36, 71, 0.08); text-align: center; transition: transform 0.3s ease; border-top: 4px solid var(--primary-blue); cursor: pointer; }
+        .inicio-card:hover { transform: translateY(-5px); }
+        .inicio-card i { font-size: 2.8rem; color: var(--primary-blue); margin-bottom: 1.2rem; }
+        .inicio-card h3 { color: var(--primary-blue); margin-bottom: 0.5rem; font-size: 1.4rem; }
+
+        /* ========== FOOTER ========== */
+        footer { background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%); color: var(--white); text-align: center; padding: 2.5rem 2rem; margin-top: 4rem; }
+        .footer-content h3 { font-size: 1.6rem; margin-bottom: 0.5rem; letter-spacing: 2px; }
+        .footer-content p { opacity: 0.9; margin-bottom: 0.8rem; font-size: 0.9rem; }
+        .social-links { margin: 1.2rem 0; display: flex; justify-content: center; gap: 1rem; }
+        .social-links a { width: 42px; height: 42px; background: rgba(255,255,255,0.1); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.2); }
+        .social-links a:hover { background: var(--white); color: var(--primary-blue); transform: translateY(-3px); }
+
+        /* ========== CARRITO FLOTANTE ========== */
+        .cart-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--gold-accent);
+            color: var(--dark-blue);
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1001;
+            transition: transform 0.3s ease;
+        }
+        .cart-float:hover { transform: scale(1.1); }
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            font-size: 0.8rem;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid var(--white);
+        }
+
+        /* ========== MODAL DEL CARRITO ========== */
+        .cart-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 22, 43, 0.7);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .cart-modal-overlay.active { display: flex; opacity: 1; }
+        .cart-modal {
+            background: var(--white);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 2rem;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--light-blue);
+            padding-bottom: 1rem;
+        }
+        .cart-modal-header h2 { color: var(--primary-blue); font-size: 1.5rem; }
+        .cart-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .cart-close:hover { color: #e74c3c; }
+        .cart-items { margin-bottom: 1.5rem; }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        .cart-item-info h4 { font-size: 0.95rem; color: var(--black); margin-bottom: 0.2rem; }
+        .cart-item-info p { font-size: 0.85rem; color: var(--primary-blue); font-weight: 600; }
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.5rem;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            padding: 1rem 0;
+            border-top: 2px solid var(--primary-blue);
+            margin-bottom: 1.5rem;
+        }
+        .btn-whatsapp {
+            width: 100%;
+            padding: 1rem;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            transition: background 0.3s;
+        }
+        .btn-whatsapp:hover { background: #128C7E; }
+        .cart-empty { text-align: center; color: var(--gray); padding: 2rem 0; font-style: italic; }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .header-container { flex-direction: row; text-align: left; gap: 0.5rem; padding: 0.6rem 1rem; justify-content: space-between; }
+            .logo-icon { width: 50px; height: 50px; border: 0.5px solid rgba(255,255,255,0.5); }
+            .logo-text h1 { font-size: 1.3rem; letter-spacing: 2px; }
+            .logo-text p { font-size: 0.55rem; letter-spacing: 2px; }
+            .contact-info p { font-size: 0.75rem; }
+            nav { top: 80px; }
+            main { margin-top: 140px; padding: 2rem 1rem; }
+            .nav-links { gap: 0.3rem; flex-wrap: wrap; justify-content: center; }
+            .nav-links a { padding: 0.8rem 1rem; font-size: 0.75rem; }
+            .section-title { font-size: 1.8rem; }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.2rem; }
+            .cart-float { bottom: 20px; right: 20px; width: 55px; height: 55px; font-size: 1.3rem; }
+        }
+        @media (max-width: 480px) {
+            .nav-links a { padding: 0.7rem 0.6rem; font-size: 0.7rem; letter-spacing: 0.5px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon"><img src="logo.png" alt="MELNE Logo"></div>
+                <div class="logo-text">
+                    <h1>MELNE</h1>
+                    <p>Perfumes & Esencias</p>
+                </div>
+            </div>
+            <div class="contact-info"><p><i class="fas fa-phone-alt"></i> 3105832356</p></div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="#inicio" class="active" data-section="inicio"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="#hombre" data-section="hombre"><i class="fas fa-male"></i> Hombre</a></li>
+                <li><a href="#mujer" data-section="mujer"><i class="fas fa-female"></i> Mujer</a></li>
+                <li><a href="#lujo" data-section="lujo"><i class="fas fa-crown"></i> Lujo</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section id="inicio" class="category-section active">
+            <h2 class="section-title">Bienvenido a MELNE</h2>
+            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--gray); margin-bottom: 2rem;">
+                    Descubre nuestra exclusiva colección de perfumes y esencias de las mejores marcas. 
+                    Ofrecemos fragancias para hombre, mujer y nuestra línea de lujo seleccionada especialmente para ti.
+                </p>
+                <div class="inicio-cards">
+                    <div class="inicio-card" onclick="document.querySelector('[data-section=hombre]').click()">
+                        <i class="fas fa-male"></i><h3>Hombre</h3><p style="color: var(--gray);">Fragancias masculinas</p>
+                    </div>
+                    <div class="inicio-card" onclick="document.querySelector('[data-section=mujer]').click()">
+                        <i class="fas fa-female"></i><h3>Mujer</h3><p style="color: var(--gray);">Fragancias femeninas</p>
+                    </div>
+                    <div class="inicio-card" onclick="document.querySelector('[data-section=lujo]').click()">
+                        <i class="fas fa-crown"></i><h3>Lujo</h3><p style="color: var(--gray);">Edición especial</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="hombre" class="category-section">
+            <h2 class="section-title">Perfumes para Hombre</h2>
+            <div class="products-grid" id="hombre-products"></div>
+        </section>
+
+        <section id="mujer" class="category-section">
+            <h2 class="section-title">Perfumes para Mujer</h2>
+            <div class="products-grid" id="mujer-products"></div>
+        </section>
+
+        <section id="lujo" class="category-section">
+            <h2 class="section-title">Línea de Lujo</h2>
+            <div class="products-grid" id="lujo-products"></div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h3>MELNE PERFUMES & ESENCIAS</h3>
+            <p>Tu destino para las mejores fragancias</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <p>&copy; 2026 MELNE Perfumes & Esencias. Todos los derechos reservados.</p>
+            <p><i class="fas fa-phone-alt"></i> Contacto: 3105832356</p>
+        </div>
+    </footer>
+
+    <!-- BOTÓN FLOTANTE DEL CARRITO -->
+    <div class="cart-float" onclick="toggleCart()">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-count" id="cart-count">0</span>
+    </div>
+
+    <!-- MODAL DEL CARRITO -->
+    <div class="cart-modal-overlay" id="cart-modal">
+        <div class="cart-modal">
+            <div class="cart-modal-header">
+                <h2><i class="fas fa-shopping-bag"></i> Tu Pedido</h2>
+                <button class="cart-close" onclick="toggleCart()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-items" id="cart-items">
+                <!-- Los items se generan con JS -->
+            </div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-amount">$0</span>
+            </div>
+            <button class="btn-whatsapp" onclick="enviarPedidoWhatsApp()">
+                <i class="fab fa-whatsapp"></i> Finalizar pedido por WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de productos (Tus datos exactos)
+        const productos = {
+            hombre: [
+                { nombre: "212 AQUA", descripcion: "Amaderado, calido especiado, citrico", precio: "$80.000", imagen: "imagenes/hombre/212-aqua.jpg" },
+                { nombre: "212 BLACK", descripcion: "Aromatico, avainillado, especiado suave", precio: "$80.000", imagen: "imagenes/hombre/212-black.jpg" },
+                { nombre: "212 RED", descripcion: "Dulce, aromático, fresco especiado", precio: "$80.000", imagen: "imagenes/hombre/212-red.jpg" },
+                { nombre: "212 HEROES", descripcion: "Aromático, herbal, afrutado", precio: "$80.000", imagen: "imagenes/hombre/212-heroes.jpg" },
+                { nombre: "CH MEN", descripcion: "Cuero, dulce, avainillado", precio: "$80.000", imagen: "imagenes/hombre/ch-men.jpg" },
+                { nombre: "212 VIP", descripcion: "Aromático, vodka, cálido especiado", precio: "$80.000", imagen: "imagenes/hombre/212-vip.jpg" },
+                { nombre: "212 NYC", descripcion: "Cítrico, verde, cálido especiado", precio: "$80.000", imagen: "imagenes/hombre/212-nyc.jpg" },
+                { nombre: "MILLON ROYAL", descripcion: "Cálido especiado, aromatico, ambar", precio: "$80.000", imagen: "imagenes/hombre/millon-royal.jpg" },
+                { nombre: "ONE MILLION", descripcion: "Cálido especiado, canela, citrico", precio: "$80.000", imagen: "imagenes/hombre/one-million.jpg" },
+                { nombre: "MILLON PRIVE", descripcion: "Calido especiado, canela, dulce", precio: "$80.000", imagen: "imagenes/hombre/millon-prive.jpg" },
+                { nombre: "MILLON LUCKY", descripcion: "Amaderado, nueces, dulce", precio: "$80.000", imagen: "imagenes/hombre/millon-lucky.jpg" },
+                { nombre: "INVICTUS", descripcion: "Cítrico, marino, aromático", precio: "$80.000", imagen: "imagenes/hombre/invictus.jpg" },
+                { nombre: "INVICTUS LEGEND", descripcion: "Marino, aromático, fresco especiado", precio: "$80.000", imagen: "imagenes/hombre/invictus-legend.jpg" },
+                { nombre: "INVICTUS VICTORY", descripcion: "Ámbar, avainillado, dulce", precio: "$80.000", imagen: "imagenes/hombre/invictus-victory.jpg" },
+                { nombre: "VICTORY ELIXIR", descripcion: "Avainillado, ámbar, fresco especiado", precio: "$80.000", imagen: "imagenes/hombre/victory-elixir.jpg" },
+                { nombre: "INVICTUS INTENSE", descripcion: "Ámbar, fresco especiado, whisky", precio: "$80.000", imagen: "imagenes/hombre/invictus-intense.jpg" },
+                { nombre: "INVICTUS PARFUM", descripcion: "Almizclado, aromático, marino", precio: "$80.000", imagen: "imagenes/hombre/invictus-parfum.jpg" },
+                { nombre: "BLACK XS", descripcion: "Dulce, cálido especiado, cítrico", precio: "$80.000", imagen: "imagenes/hombre/black-xs.jpg" },
+                { nombre: "BLACK XS L'EXCES", descripcion: "Citrico, amaderado, ambar", precio: "$80.000", imagen: "imagenes/hombre/black-xs-exces.jpg" },
+                { nombre: "L'APHRODISIAQUE", descripcion: "Dulce, amielado, calido especiado", precio: "$80.000", imagen: "imagenes/hombre/l-aphrodisiaque.jpg" },
+                { nombre: "PHANTOM", descripcion: "Citrico, avainillado, lavanda", precio: "$80.000", imagen: "imagenes/hombre/phantom.jpg" },
+                { nombre: "PHANTOM PARFUM", descripcion: "Aromatico, avainillado, calido especiado", precio: "$80.000", imagen: "imagenes/hombre/phantom-parfum.jpg" },
+                { nombre: "PURE XS", descripcion: "Dulce, avainillado, Calido especiado", precio: "$80.000", imagen: "imagenes/hombre/pure-xs.jpg" },
+                { nombre: "HUGO RED", descripcion: "Afrutados, dulce, verde", precio: "$80.000", imagen: "imagenes/hombre/hugo-red.jpg" },
+                { nombre: "HUGO MAN", descripcion: "Amaderado, aromático, conífera", precio: "$80.000", imagen: "imagenes/hombre/hugo-man.jpg" },
+                { nombre: "JUST DIFFERENT", descripcion: "Verde, aromático, fresco especiado", precio: "$80.000", imagen: "imagenes/hombre/just-different.jpg" },
+                { nombre: "BOSS UNLIMITED", descripcion: "Verde, afrutados, dulce", precio: "$80.000", imagen: "imagenes/hombre/boss-unlimited.jpg" },
+                { nombre: "BOSS NIGHT", descripcion: "Amaderado, Violeta, atalcado", precio: "$80.000", imagen: "imagenes/hombre/boss-night.jpg" },
+                { nombre: "BOSS BOTTLED", descripcion: "Amaderado, afrutado, avainillado", precio: "$80.000", imagen: "imagenes/hombre/boss-bottled.jpg" },
+                { nombre: "LACOSTE BLEU", descripcion: "Aromático, cítrico, fresco", precio: "$80.000", imagen: "imagenes/hombre/lacoste-bleu.jpg" },
+                { nombre: "LACOSTE RED", descripcion: "Amaderado, afrutados, verde", precio: "$80.000", imagen: "imagenes/hombre/lacoste-red.jpg" },
+                { nombre: "LACOSTE WHITE", descripcion: "Amaderado, cítrico, aromático", precio: "$80.000", imagen: "imagenes/hombre/lacoste-white.jpg" },
+                { nombre: "LACOSTE NOIR", descripcion: "Amaderado, aromático, ozónico", precio: "$80.000", imagen: "imagenes/hombre/lacoste-noir.jpg" },
+                { nombre: "LACOSTE ROUGE", descripcion: "Calido especiado, tropical, afrutado", precio: "$80.000", imagen: "imagenes/hombre/lacoste-rouge.jpg" },
+                { nombre: "LACOSTE GREEN", descripcion: "Citrico, aromatico, fresco especiado", precio: "$80.000", imagen: "imagenes/hombre/lacoste-green.jpg" },
+                { nombre: "EROS FLAME", descripcion: "Cítrico, avainillado, aromático", precio: "$80.000", imagen: "imagenes/hombre/eros-flame.jpg" },
+                { nombre: "EROS VERSACE", descripcion: "Avainillado, aromático, verde", precio: "$80.000", imagen: "imagenes/hombre/eros-versace.jpg" },
+                { nombre: "EROS ENERGY", descripcion: "Cítrico, aromático, limón", precio: "$80.000", imagen: "imagenes/hombre/eros-energy.jpg" },
+                { nombre: "DYLAN BLUE", descripcion: "Ámbar, cítrico, fresco", precio: "$80.000", imagen: "imagenes/hombre/dylan-blue.jpg" },
+                { nombre: "KING", descripcion: "Aromático, amaderado, cálido", precio: "$80.000", imagen: "imagenes/hombre/king.jpg" },
+                { nombre: "THE ONE", descripcion: "Cálido especiado, ámbar, tabaco", precio: "$80.000", imagen: "imagenes/hombre/the-one.jpg" },
+                { nombre: "LIGHT BLUE", descripcion: "Fresco especiado, ozónico, citrico", precio: "$80.000", imagen: "imagenes/hombre/light-blue.jpg" },
+                { nombre: "ULTRA-MALE", descripcion: "Avainillado, afrutados, dulce", precio: "$80.000", imagen: "imagenes/hombre/ultra-male.jpg" },
+                { nombre: "LE MALE", descripcion: "Avainillado, aromático, fresco", precio: "$80.000", imagen: "imagenes/hombre/le-male.jpg" },
+                { nombre: "LE MALE ELIXIR", descripcion: "Cálida, dulce, sensual", precio: "$95.000", imagen: "imagenes/hombre/le-male-elixir.jpg" },
+                { nombre: "ULTRA MALE", descripcion: "Dulce, intensa, seductora", precio: "$95.000", imagen: "imagenes/hombre/ultra-male-plus.jpg" },
+                { nombre: "LE BEAU LE PARFUM", descripcion: "Tropical, dulce, coco", precio: "$95.000", imagen: "imagenes/hombre/le-beau-parfum.jpg" },
+                { nombre: "BAHARARA KING", descripcion: "Dulce, fresco, ambarado", precio: "$100.000", imagen: "imagenes/hombre/baharara-king.jpg" },
+                { nombre: "ERBA PURA", descripcion: "Frutal, dulce, fresca", precio: "$110.000", imagen: "imagenes/hombre/erba-pura.jpg" },
+                { nombre: "LE BEAU", descripcion: "Coco, avainillado, dulce", precio: "$80.000", imagen: "imagenes/hombre/le-beau.jpg" },
+                { nombre: "LE BEAU LE PARFUM", descripcion: "Dulce, amaderado, coco", precio: "$80.000", imagen: "imagenes/hombre/le-beau-le-parfum.jpg" },
+                { nombre: "LE MALE PARFUM", descripcion: "Calido especiado, avainillado, aromatico", precio: "$80.000", imagen: "imagenes/hombre/le-male-parfum.jpg" },
+                { nombre: "SCANDAL", descripcion: "Caramelo, aromático, dulce", precio: "$80.000", imagen: "imagenes/hombre/scandal.jpg" },
+                { nombre: "LEGEND SPIRIT", descripcion: "Cítrico, acuático, almizclado", precio: "$80.000", imagen: "imagenes/hombre/legend-spirit.jpg" },
+                { nombre: "LEGEND", descripcion: "Afrutados, dulce, aromático", precio: "$80.000", imagen: "imagenes/hombre/legend.jpg" },
+                { nombre: "AVENTUS", descripcion: "Afrutado, cuero, amaderado", precio: "$80.000", imagen: "imagenes/hombre/aventus.jpg" },
+                { nombre: "SILVER", descripcion: "Verde, cítrico, afrutados", precio: "$80.000", imagen: "imagenes/hombre/silver.jpg" },
+                { nombre: "360 BLUE", descripcion: "Aromático, amaderado, fresco", precio: "$80.000", imagen: "imagenes/hombre/360-blue.jpg" },
+                { nombre: "BLEU DE CHANEL", descripcion: "Avainillado, amaderado, atalcado", precio: "$80.000", imagen: "imagenes/hombre/bleu-de-chanel.jpg" },
+                { nombre: "FARENHEIT", descripcion: "Cuero, amaderado, ozonico", precio: "$80.000", imagen: "imagenes/hombre/farenheit.jpg" },
+                { nombre: "SAUVAGE", descripcion: "fresco especiado, ambar, citrico", precio: "$80.000", imagen: "imagenes/hombre/sauvage.jpg" },
+                { nombre: "MOSCHINO TOY PEARL", descripcion: "Citrico, aromatico, almizcado", precio: "$80.000", imagen: "imagenes/hombre/moschino-toy-pearl.jpg" },
+                { nombre: "TOY BOY", descripcion: "Rosas, florales, almizcado", precio: "$80.000", imagen: "imagenes/hombre/toy-boy.jpg" },
+                { nombre: "ASAD", descripcion: "Calido especiado, ambar, avainillado", precio: "$80.000", imagen: "imagenes/hombre/asad.jpg" },
+                { nombre: "ASAD BOURBON", descripcion: "Avainillado, cacao, aromático", precio: "$80.000", imagen: "imagenes/hombre/asad-bourbon.jpg" },
+                { nombre: "ASAD ZANZIBAR", descripcion: "Iris, atalcado, avainillado", precio: "$80.000", imagen: "imagenes/hombre/asad-zanzibar.jpg" },
+                { nombre: "ASAD ELIXIR", descripcion: "Especiada, ambarada, poderosa", precio: "$80.000", imagen: "imagenes/hombre/asad-elixir.jpg" },
+                { nombre: "OUD FOR GLORY", descripcion: "Oud, cálido, especiado", precio: "$80.000", imagen: "imagenes/hombre/oud-for-glory.jpg" },
+                { nombre: "OUD FOR GLORY ", descripcion: "Oud, cálido, especiado", precio: "$100.000", imagen: "imagenes/hombre/oud-for-glory-20.jpg" },
+                { nombre: "HONOR Y GLORIA", descripcion: "Dulce, cálido especiado, avainillado", precio: "$80.000", imagen: "imagenes/hombre/honor-y-gloria.jpg" },
+                { nombre: "HONOR Y GLORIA ", descripcion: "Dulce, cálido especiado, avainillado", precio: "$100.000", imagen: "imagenes/hombre/honor-y-gloria-20.jpg" },
+                { nombre: "AMETHYST", descripcion: "Tropical, rosas, oud, cítrico", precio: "$80.000", imagen: "imagenes/hombre/amethyst.jpg" },
+                { nombre: "AMETHYST ", descripcion: "Tropical, rosas, oud, cítrico", precio: "$100.000", imagen: "imagenes/hombre/amethyst-20.jpg" },
+                { nombre: "SUBLIME", descripcion: "Afrutado, fresco, tropical", precio: "$80.000", imagen: "imagenes/hombre/sublime.jpg" },
+                { nombre: "SUBLIME ", descripcion: "Afrutado, fresco, tropical", precio: "$100.000", imagen: "imagenes/hombre/sublime-20.jpg" },
+                { nombre: "AJWAD", descripcion: "Afrutados, cuero, tropical", precio: "$80.000", imagen: "imagenes/hombre/ajwad.jpg" },
+                { nombre: "EMEER", descripcion: "Aromatico, Amaderado, citrico", precio: "$80.000", imagen: "imagenes/hombre/emeer.jpg" },
+                { nombre: "SHAHEEN GOLD", descripcion: "Dulce, especiado, oriental", precio: "$80.000", imagen: "imagenes/hombre/shaheen-gold.jpg" },
+                { nombre: "ART OF UNIVERSE", descripcion: "Fresca, dulce, elegante", precio: "$80.000", imagen: "imagenes/hombre/art-of-universe.jpg" },
+                { nombre: "HIS CONFESSION", descripcion: "Amaderada, dulce, intensa", precio: "$80.000", imagen: "imagenes/hombre/his-confession.jpg" },
+                { nombre: "KHAMRAH", descripcion: "Dulce, canela, ámbar", precio: "$80.000", imagen: "imagenes/hombre/khamrah.jpg" },
+                { nombre: "KHAMRAH QAHWA", descripcion: "Dulce, avainillado, ámbar", precio: "$80.000", imagen: "imagenes/hombre/khamrah-qahwa.jpg" },
+                { nombre: "KHAMRAH WAHA", descripcion: "Tropical, fresca, avainillada", precio: "$80.000", imagen: "imagenes/hombre/khamrah-waha.jpg" },
+                { nombre: "KHAMRAH DUKHAN", descripcion: "Dulce, especiado, seductor", precio: "$80.000", imagen: "imagenes/hombre/khamrah-dukhan.jpg" },
+                { nombre: "KHAMRAH LUJO ", descripcion: "Dulce, canela, ámbar", precio: "$100.000", imagen: "imagenes/hombre/khamrah-lujo-20.jpg" },
+                { nombre: "QAHWA LUJO ", descripcion: "Dulce, avainillado, ámbar", precio: "$100.000", imagen: "imagenes/hombre/qahwa-lujo-20.jpg" },
+                { nombre: "DUKHAN LUJO ", descripcion: "Dulce, especiado, seductor", precio: "$100.000", imagen: "imagenes/hombre/dukhan-lujo-20.jpg" },
+                { nombre: "ORIENTICA AMBER ROUGE ", descripcion: "Ámbar, amaderado, cálido", precio: "$95.000", imagen: "imagenes/hombre/orientica-amber-rouge.jpg" },
+                { nombre: "SAFRON ", descripcion: "Cálido especiado, amaderado, ambar", precio: "$90.000", imagen: "imagenes/hombre/safron.jpg" },
+                { nombre: "VELVET GOLD ", descripcion: "Atalcado, almizcado, pachuli", precio: "$90.000", imagen: "imagenes/hombre/velvet-gold.jpg" },
+                { nombre: "INITIO", descripcion: "Calido especiado, Fresco especiado, oud", precio: "$80.000", imagen: "imagenes/hombre/initio.jpg" },
+                { nombre: "ORIENTICA EXCLUSIVE ROYAL AMBER ", descripcion: "Afrutado, dulce, ambarado", precio: "$95.000", imagen: "imagenes/hombre/orientica-royal-amber.jpg" },
+                { nombre: "ORIENTICA AZURE FANTASY ", descripcion: "Fresco, cítrico, elegante", precio: "$95.000", imagen: "imagenes/hombre/orientica-azure.jpg" },
+                { nombre: "ARABIANS TONKA", descripcion: "Dulce, avainillado, ámbar", precio: "$80.000", imagen: "imagenes/hombre/arabians-tonka.jpg" },
+                { nombre: "ARABIANS", descripcion: "Aromatico, calido especiado, oud", precio: "$80.000", imagen: "imagenes/hombre/arabians.jpg" },
+                { nombre: "STARRY NIGHT", descripcion: "Atalcado, citrico, almizcado", precio: "$80.000", imagen: "imagenes/hombre/starry-night.jpg" },
+                { nombre: "AHLI VEGA", descripcion: "Afrutado, amaderado, atalcado", precio: "$80.000", imagen: "imagenes/hombre/ahli-vega.jpg" },
+                { nombre: "AHLI KARPOS", descripcion: "Mango, cítrico, ámbar", precio: "$80.000", imagen: "imagenes/hombre/ahli-karpos.jpg" },
+                { nombre: "MANDARIN SKY", descripcion: "Cítrico, dulce, caramelo", precio: "$80.000", imagen: "imagenes/hombre/mandarin-sky.jpg" },
+                { nombre: "AHLI CORVUS", descripcion: "Afrutado, vainilla, floral", precio: "$80.000", imagen: "imagenes/hombre/ahli-corvus.jpg" },
+                { nombre: "ODYSSEY SPECTRA", descripcion: "Cálido especiado, dulce, avainillado", precio: "$80.000", imagen: "imagenes/hombre/odyssey-spectra.jpg" },
+                { nombre: "ODISSEY CHOCOLATE", descripcion: "Chocolate, dulce, cremoso", precio: "$80.000", imagen: "imagenes/hombre/odyssey-chocolate.jpg" },
+                { nombre: "MANDARIN ELIXIR", descripcion: "Avainillado, cítrico, dulce", precio: "$80.000", imagen: "imagenes/hombre/mandarin-elixir.jpg" },
+                { nombre: "ODISSEY LIMONI", descripcion: "Fresco, citrico, vibrante", precio: "$80.000", imagen: "imagenes/hombre/odyssey-limoni.jpg" },
+                { nombre: "OMBRE NOMADE", descripcion: "Ambar, oud, Cuero", precio: "$80.000", imagen: "imagenes/hombre/ombre-nomade.jpg" },
+                { nombre: "CLUB DE NUIT BESTIA NEGRA", descripcion: "Citrico, Afrutado, Cuero", precio: "$80.000", imagen: "imagenes/hombre/club-de-nuit-bestia.jpg" },
+                { nombre: "CLUB DE NUIT UNTOLD", descripcion: "Especiado, Amaderado, sofisticado", precio: "$80.000", imagen: "imagenes/hombre/club-de-nuit-untold.jpg" },
+                { nombre: "HARAMAIN AMBER OUD", descripcion: "dulce, afrutado, ambar", precio: "$80.000", imagen: "imagenes/hombre/haramain-amber-oud.jpg" },
+                { nombre: "VALENTINO BOR IN ROMA", descripcion: "Amaderado, mineral, aromatico", precio: "$80.000", imagen: "imagenes/hombre/valentino-bor.jpg" },
+                { nombre: "TOMMY", descripcion: "Verde, Fresco especiado, Citrico", precio: "$80.000", imagen: "imagenes/hombre/tommy.jpg" },
+                { nombre: "SWIS ARMY", descripcion: "Aromatico, fresco, verde", precio: "$80.000", imagen: "imagenes/hombre/swis-army.jpg" },
+                { nombre: "NAUTICA", descripcion: "Aromático, fresco, verde", precio: "$80.000", imagen: "imagenes/hombre/nautica.jpg" },
+                { nombre: "BACCARAT ROUGE", descripcion: "Amaderado, almendrado, ámbar", precio: "$80.000", imagen: "imagenes/hombre/baccarat-rouge.jpg" },
+                { nombre: "STRNGER WITH YOU", descripcion: "Cítrico, avainillado, cálido", precio: "$80.000", imagen: "imagenes/hombre/stranger-with-you.jpg" },
+                { nombre: "ISSEY MIYAKE", descripcion: "Cítrico, afrutado, ácido", precio: "$80.000", imagen: "imagenes/hombre/issey-miyake.jpg" },
+                { nombre: "SANTAL 33", descripcion: "Amaderado, atalcado, cuero", precio: "$80.000", imagen: "imagenes/hombre/santal-33.jpg" },
+                { nombre: "AGUA DI GIOI", descripcion: "Aromático, cítrico, floral", precio: "$80.000", imagen: "imagenes/hombre/agua-di-gioi.jpg" },
+                { nombre: "AGUA DI GIO PROFUNDO", descripcion: "Aromático, fresco, marino", precio: "$80.000", imagen: "imagenes/hombre/agua-di-gio-profundo.jpg" },
+                { nombre: "CK ONE", descripcion: "Cítrico, verde, amaderado", precio: "$80.000", imagen: "imagenes/hombre/ck-one.jpg" },
+                { nombre: "9 PM", descripcion: "Vainilla, ámbar, aromático", precio: "$80.000", imagen: "imagenes/hombre/9pm.jpg" },
+                { nombre: "9 AM", descripcion: "Fresco, Citrico, Juvenil", precio: "$80.000", imagen: "imagenes/hombre/9am.jpg" },
+                { nombre: "9 PM REBEL", descripcion: "Dulce, especiado, nocturno", precio: "$80.000", imagen: "imagenes/hombre/9pm-rebel.jpg" },
+                { nombre: "9 PM ELIXIR", descripcion: "Cuero, avainillado, especiado", precio: "$80.000", imagen: "imagenes/hombre/9pm-elixir.jpg" },
+                { nombre: "SPICEBOMB", descripcion: "Cálido especiado, canela, tabaco", precio: "$80.000", imagen: "imagenes/hombre/spicebomb.jpg" },
+                { nombre: "BVLGARI MAN BLACK", descripcion: "Calido especiado, amaderado, cuero", precio: "$80.000", imagen: "imagenes/hombre/bvlgari-man-black.jpg" },
+                { nombre: "POLO BLUE", descripcion: "Aromatico, marino, amaderado", precio: "$80.000", imagen: "imagenes/hombre/polo-blue.jpg" },
+                { nombre: "POLO RED", descripcion: "Citrico, afrutado, ambar", precio: "$80.000", imagen: "imagenes/hombre/polo-red.jpg" }
+            ],
+            mujer: [
+                { nombre: "212 SEXY", descripcion: "Dulce, especiado, caramelo", precio: "$80.000", imagen: "imagenes/mujer/212-sexy.jpg" },
+                { nombre: "212 ROSE", descripcion: "Frutado, floral, amaderado", precio: "$80.000", imagen: "imagenes/mujer/212-rose.jpg" },
+                { nombre: "GOOD GIRL BLUSH", descripcion: "Floral, avainillado, cítrico", precio: "$80.000", imagen: "imagenes/mujer/good-girl-blush.jpg" },
+                { nombre: "212 PATINETA", descripcion: "Afrutado, floral blanco, dulce", precio: "$80.000", imagen: "imagenes/mujer/212-patineta.jpg" },
+                { nombre: "CH DAMA", descripcion: "Cítrico, amaderado, cuero", precio: "$80.000", imagen: "imagenes/mujer/ch-dama.jpg" },
+                { nombre: "LA BOMBA", descripcion: "Floral, afrutado, ambarado", precio: "$90.000", imagen: "imagenes/mujer/la-bomba.jpg" },
+                { nombre: "GOOD GIRL SUPREME", descripcion: "Floral blanco, avainillado, afrutado", precio: "$80.000", imagen: "imagenes/mujer/good-girl-supreme.jpg" },
+                { nombre: "VERY GOOD", descripcion: "Afrutado, Rosas, Fresco", precio: "$80.000", imagen: "imagenes/mujer/very-good.jpg" },
+                { nombre: "GOOD GIRL", descripcion: "Dulce, Floral blanco, Calido especiado", precio: "$80.000", imagen: "imagenes/mujer/good-girl.jpg" },
+                { nombre: "TOY2", descripcion: "Afrutados, Florales, fresco", precio: "$80.000", imagen: "imagenes/mujer/toy2.jpg" },
+                { nombre: "BUBBLE GUM", descripcion: "Afrutados, dulce, rosas", precio: "$80.000", imagen: "imagenes/mujer/bubble-gum.jpg" },
+                { nombre: "TOY PEARL", descripcion: "Aromático, cítrico, amaderado", precio: "$80.000", imagen: "imagenes/mujer/toy-pearl.jpg" },
+                { nombre: "PURE XS", descripcion: "Avainillado, dulce, amaderado", precio: "$80.000", imagen: "imagenes/mujer/pure-xs.jpg" },
+                { nombre: "FAME", descripcion: "Tropical, avainillado, afrutado", precio: "$80.000", imagen: "imagenes/mujer/fame.jpg" },
+                { nombre: "BURBERRY HER", descripcion: "Vainilla, Dulce, Floral", precio: "$80.000", imagen: "imagenes/mujer/burberry-her.jpg" },
+                { nombre: "OLYMPEA", descripcion: "Avainillado, amaderado, atalcado", precio: "$80.000", imagen: "imagenes/mujer/olympea.jpg" },
+                { nombre: "ELEGANT", descripcion: "Fresco, atalcado, verde", precio: "$80.000", imagen: "imagenes/mujer/elegant.jpg" },
+                { nombre: "SPARKING", descripcion: "Dulce, caramelo", precio: "$80.000", imagen: "imagenes/mujer/sparking.jpg" },
+                { nombre: "NATURAL", descripcion: "Dulce, afrutados, coco", precio: "$80.000", imagen: "imagenes/mujer/natural.jpg" },
+                { nombre: "OMNIA AMETHYSTE", descripcion: "Atalcado, iris, avainillado", precio: "$80.000", imagen: "imagenes/mujer/omnia-amethyste.jpg" },
+                { nombre: "OMNIA CORAL", descripcion: "Florales, amaderado, fresco especiado", precio: "$80.000", imagen: "imagenes/mujer/omnia-coral.jpg" },
+                { nombre: "OMNIA CRISTAL", descripcion: "Florales, amaderado, fresco especiado", precio: "$80.000", imagen: "imagenes/mujer/omnia-cristal.jpg" },
+                { nombre: "MAYAR ", descripcion: "Frutal, floral, dulce", precio: "$95.000", imagen: "imagenes/mujer/mayar.jpg" },
+                { nombre: "ECLAIRE ", descripcion: "Dulce, vainilla, floral", precio: "$95.000", imagen: "imagenes/mujer/eclaire.jpg" },
+                { nombre: "SCANDAL", descripcion: "Amielado, dulce, floral blanco", precio: "$80.000", imagen: "imagenes/mujer/scandal.jpg" },
+                { nombre: "CLASIQUE", descripcion: "Dulce, floral, blanco, atalcado", precio: "$80.000", imagen: "imagenes/mujer/clasique.jpg" },
+                { nombre: "LA BELLE", descripcion: "Avainillado, dulce, ámbar", precio: "$80.000", imagen: "imagenes/mujer/la-belle.jpg" },
+                { nombre: "YUM YUM LUJO ", descripcion: "Afrutado, avainillado, atalcado", precio: "$100.000", imagen: "imagenes/mujer/yum-yum-lujo.jpg" },
+                { nombre: "YUM YUM ", descripcion: "Afrutado, avainillado, atalcado", precio: "$90.000", imagen: "imagenes/mujer/yum-yum.jpg" },
+                { nombre: "ODISSEY CANDEE", descripcion: "Florales, afrutados, cítrico", precio: "$80.000", imagen: "imagenes/mujer/odyssey-candee.jpg" },
+                { nombre: "ISLAND BLISS ", descripcion: "Avainillado, dulce, coco", precio: "$90.000", imagen: "imagenes/mujer/island-bliss.jpg" },
+                { nombre: "CLUB DE NUIT UNTOLD", descripcion: "Especiado, amaderado, sofisticado", precio: "$80.000", imagen: "imagenes/mujer/club-de-nuit-untold.jpg" },
+                { nombre: "ODISSEY LIMONI", descripcion: "Fresco, cítrico, vibrante", precio: "$80.000", imagen: "imagenes/mujer/odyssey-limoni.jpg" },
+                { nombre: "BHARARA ROSE ", descripcion: "Frutal, floral, dulce", precio: "$100.000", imagen: "imagenes/mujer/bharara-rose.jpg" },
+                { nombre: "BHARARA KING ", descripcion: "Dulce, fresco, ambarado", precio: "$100.000", imagen: "imagenes/mujer/bharara-king.jpg" },
+                { nombre: "HAYA ", descripcion: "Floral, dulce, envolvente", precio: "$110.000", imagen: "imagenes/mujer/haya.jpg" },
+                { nombre: "BHARARA NICHE FEMME ", descripcion: "Elegante, femenina, floral", precio: "$95.000", imagen: "imagenes/mujer/bharara-niche.jpg" },
+                { nombre: "BRIGHT CRYSTAL", descripcion: "Floral, afrutado, fresco", precio: "$80.000", imagen: "imagenes/mujer/bright-crystal.jpg" },
+                { nombre: "360", descripcion: "Floral blanco, florales, fresco", precio: "$80.000", imagen: "imagenes/mujer/360.jpg" },
+                { nombre: "THANK YOU NEXT", descripcion: "Dulce, coco, afrutados", precio: "$80.000", imagen: "imagenes/mujer/thank-you-next.jpg" },
+                { nombre: "CANDY", descripcion: "Dulce, avainillado, afrutado", precio: "$80.000", imagen: "imagenes/mujer/candy.jpg" },
+                { nombre: "THANK YOU NEXT 2.0", descripcion: "Dulce, amaderado, afrutados", precio: "$80.000", imagen: "imagenes/mujer/thank-you-next-2.jpg" },
+                { nombre: "CLOUD", descripcion: "Dulce, lactónico, avainilaldo", precio: "$80.000", imagen: "imagenes/mujer/cloud.jpg" },
+                { nombre: "LIGHT BLUE", descripcion: "Cítrico, amaderado, fresco", precio: "$80.000", imagen: "imagenes/mujer/light-blue.jpg" },
+                { nombre: "ISLAM BLISS ", descripcion: "Vainilla, dulce, gourmand", precio: "$100.000", imagen: "imagenes/mujer/islam-bliss.jpg" },
+                { nombre: "NOBLE BLUSH ", descripcion: "Dulce, cremoso, Floral", precio: "$95.000", imagen: "imagenes/mujer/noble-blush.jpg" },
+                { nombre: "MEOW", descripcion: "Avainillado, Floral blanco, dulce", precio: "$80.000", imagen: "imagenes/mujer/meow.jpg" },
+                { nombre: "VIDA BELLA", descripcion: "Dulce, Avainillado, Afrutado", precio: "$80.000", imagen: "imagenes/mujer/vida-bella.jpg" },
+                { nombre: "VALENTINO DONNA", descripcion: "Amaderado, avainillado, floral blanco", precio: "$80.000", imagen: "imagenes/mujer/valentino-donna.jpg" },
+                { nombre: "BACCARAT ROUGE", descripcion: "Ámbar, almendrado, amaderado", precio: "$80.000", imagen: "imagenes/mujer/baccarat-rouge.jpg" },
+                { nombre: "RALPH", descripcion: "Florales, afrutados, cítrico", precio: "$80.000", imagen: "imagenes/mujer/ralph.jpg" },
+                { nombre: "DELINA", descripcion: "Rosas, afrutados, avainillados", precio: "$80.000", imagen: "imagenes/mujer/delina.jpg" },
+                { nombre: "PRADA MILANO", descripcion: "Dulce, Floral, Sofisticado", precio: "$80.000", imagen: "imagenes/mujer/prada-milano.jpg" },
+                { nombre: "YARA TOUCH", descripcion: "Tropical, dulce, avainillado", precio: "$80.000", imagen: "imagenes/mujer/yara-touch.jpg" },
+                { nombre: "AJWAD", descripcion: "Afrutado, dulce, avainillado", precio: "$80.000", imagen: "imagenes/mujer/ajwad.jpg" },
+                { nombre: "YARA CANDY", descripcion: "Avainillado, afrutados, floral blanco", precio: "$80.000", imagen: "imagenes/mujer/yara-candy.jpg" },
+                { nombre: "YARA MOI", descripcion: "Amaderado, caramelo, floral blanco", precio: "$80.000", imagen: "imagenes/mujer/yara-moi.jpg" },
+                { nombre: "YARA ELIXIR", descripcion: "Dulce, Floral, Sensual", precio: "$80.000", imagen: "imagenes/mujer/yara-elixir.jpg" },
+                { nombre: "YARA", descripcion: "Dulce, Avainillado, atalcado", precio: "$80.000", imagen: "imagenes/mujer/yara.jpg" },
+                { nombre: "HER CONFESSION", descripcion: "Dulce, suave, cremosa", precio: "$80.000", imagen: "imagenes/mujer/her-confession.jpg" },
+                { nombre: "ART OF UNIVERSE", descripcion: "Fresca, dulce, elegante", precio: "$80.000", imagen: "imagenes/mujer/art-of-universe.jpg" },
+                { nombre: "SHAHEEN GOLD", descripcion: "Dulce, especiado, oriental", precio: "$80.000", imagen: "imagenes/mujer/shaheen-gold.jpg" },
+                { nombre: "KHAMRAH", descripcion: "Dulce, ámbar, canela", precio: "$80.000", imagen: "imagenes/mujer/khamrah.jpg" },
+                { nombre: "KHAMRAH QAHWA", descripcion: "Cálido especiado, dulce, avainillado", precio: "$80.000", imagen: "imagenes/mujer/khamrah-qahwa.jpg" },
+                { nombre: "KHAMRAH DUKHAN", descripcion: "Dulce, especiado, Seductor", precio: "$80.000", imagen: "imagenes/mujer/khamrah-dukhan.jpg" },
+                { nombre: "KHAMRAH WAHA", descripcion: "Tropical, fresca, avainillada", precio: "$80.000", imagen: "imagenes/mujer/khamrah-waha.jpg" },
+                { nombre: "KHAMRAH LUJO ", descripcion: "Dulce, canela, ámbar", precio: "$100.000", imagen: "imagenes/mujer/khamrah-lujo.jpg" },
+                { nombre: "QAHWA LUJO ", descripcion: "Calido especiado, dulce, avainillado", precio: "$100.000", imagen: "imagenes/mujer/qahwa-lujo.jpg" },
+                { nombre: "DUKHAN LUJO ", descripcion: "Dulce, especiado, seductor", precio: "$100.000", imagen: "imagenes/mujer/dukhan-lujo.jpg" },
+                { nombre: "SUBLIME", descripcion: "Afrutado, fresco, Tropical", precio: "$80.000", imagen: "imagenes/mujer/sublime.jpg" },
+                { nombre: "SUBLIME ", descripcion: "Afrutado, fresco, Tropical", precio: "$100.000", imagen: "imagenes/mujer/sublime-20.jpg" },
+                { nombre: "OUD FOR GLORY", descripcion: "Oud, Calido especiado, fresco especiado", precio: "$80.000", imagen: "imagenes/mujer/oud-for-glory.jpg" },
+                { nombre: "OUD FOR GLORY ", descripcion: "Oud, Calido especiado, fresco especiado", precio: "$100.000", imagen: "imagenes/mujer/oud-for-glory-20.jpg" },
+                { nombre: "AMETHYST", descripcion: "Rosas, Oud, Ambar", precio: "$80.000", imagen: "imagenes/mujer/amethyst.jpg" },
+                { nombre: "AMETHYST ", descripcion: "Rosas, Oud, Ambar", precio: "$100.000", imagen: "imagenes/mujer/amethyst-20.jpg" },
+                { nombre: "HONOR Y GLORY", descripcion: "Dulce, cálido, avainillado", precio: "$80.000", imagen: "imagenes/mujer/honor-y-glory.jpg" },
+                { nombre: "HONOR Y GLORY ", descripcion: "Dulce, cálido, avainillado", precio: "$100.000", imagen: "imagenes/mujer/honor-y-glory-20.jpg" },
+                { nombre: "HARAMAIN AMBER OUD", descripcion: "Dulce, afrutado, ambar", precio: "$80.000", imagen: "imagenes/mujer/haramain-amber-oud.jpg" },
+                { nombre: "AMBER OUD ULTRA VIOLET LUJO ", descripcion: "Rosas, Jazmin, Fresca", precio: "$100.000", imagen: "imagenes/mujer/amber-oud-ultra.jpg" },
+                { nombre: "ODISSEY CHOCOLATE", descripcion: "Chocolate, dulce, cremoso", precio: "$80.000", imagen: "imagenes/mujer/odyssey-chocolate.jpg" },
+                { nombre: "ARABIANS", descripcion: "Aromático, cálido especiado, oud", precio: "$80.000", imagen: "imagenes/mujer/arabians.jpg" },
+                { nombre: "ARABIANS TONKA", descripcion: "Dulce, avainillado, ámbar", precio: "$80.000", imagen: "imagenes/mujer/arabians-tonka.jpg" },
+                { nombre: "STARRY NIGHT", descripcion: "Atalcado, cítrico, almizcado", precio: "$80.000", imagen: "imagenes/mujer/starry-night.jpg" },
+                { nombre: "ORIENTICA AMBER ROUGE ", descripcion: "Ámbar, amaderado, cálido especiado", precio: "$95.000", imagen: "imagenes/mujer/orientica-amber-rouge.jpg" },
+                { nombre: "ORIENTICA EXCLUSIVE ROYAL AMBER", descripcion: "Afrutado, Dulce, Ambarado", precio: "$95.000", imagen: "imagenes/mujer/orientica-royal-amber.jpg" },
+                { nombre: "ORIENTICA AZURE FANTASY ", descripcion: "Fresco, Citrico, elegante", precio: "$95.000", imagen: "imagenes/mujer/orientica-azure.jpg" },
+                { nombre: "SAFRON ", descripcion: "Calido especiado, Amaderado, Ambar", precio: "$90.000", imagen: "imagenes/mujer/safron.jpg" },
+                { nombre: "VELVET GOLD ", descripcion: "Atalcado, almizcado, pachuli", precio: "$90.000", imagen: "imagenes/mujer/velvet-gold.jpg" },
+                { nombre: "ESCADA", descripcion: "Floral, fresco, dulce", precio: "$80.000", imagen: "imagenes/mujer/escada.jpg" },
+                { nombre: "MISS DIOR", descripcion: "Avainillado, atalcado", precio: "$80.000", imagen: "imagenes/mujer/miss-dior.jpg" },
+                { nombre: "FANTASY BRITNEY", descripcion: "Dulce, afrutado, tropical", precio: "$80.000", imagen: "imagenes/mujer/fantasy-britney.jpg" },
+                { nombre: "PARIS HILTON", descripcion: "Afrutado, Floral Blanco, Fresco", precio: "$80.000", imagen: "imagenes/mujer/paris-hilton.jpg" },
+                { nombre: "AHLI KARPOS", descripcion: "Frutal, Tropical, Dulce", precio: "$80.000", imagen: "imagenes/mujer/ahli-karpos.jpg" },
+                { nombre: "AHLI VEGA", descripcion: "Afrutado, Amaderado, Rosas", precio: "$80.000", imagen: "imagenes/mujer/ahli-vega.jpg" },
+                { nombre: "AHLI CORVUS", descripcion: "Ambar, Frutal, Vainilla", precio: "$80.000", imagen: "imagenes/mujer/ahli-corvus.jpg" },
+                { nombre: "INITIO", descripcion: "Cálido, especiado, oud", precio: "$80.000", imagen: "imagenes/mujer/initio.jpg" },
+                { nombre: "BLACK PHANTOM", descripcion: "Caramelo, café, amaderado", precio: "$80.000", imagen: "imagenes/mujer/black-phantom.jpg" },
+                { nombre: "COCO CHANEL", descripcion: "Citrico, Amaderado, Floral", precio: "$80.000", imagen: "imagenes/mujer/coco-chanel.jpg" },
+                { nombre: "CAN CAN", descripcion: "Fresco, Floral, Vainilla", precio: "$80.000", imagen: "imagenes/mujer/can-can.jpg" },
+                { nombre: "CHANEL #5", descripcion: "Floral, vainilla, cítrico", precio: "$80.000", imagen: "imagenes/mujer/chanel-5.jpg" },
+                { nombre: "CHANCE CHANEL", descripcion: "Floral, Afrutada, Limon", precio: "$80.000", imagen: "imagenes/mujer/chance-chanel.jpg" }
+            ],
+            lujo: [
+                { nombre: "BHARARA KING", descripcion: "Cítrico, afrutado, vainilla, almizcle, ámbar", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/bharara-king.jpg" },
+                { nombre: "BHARARA ROSE", descripcion: "Rosa turca, frutos rojos, almizcle blanco, ámbar", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/bharara-rose.jpg" },
+                { nombre: "BHARARA NICHE FEMME", descripcion: "Cítricos brillantes, flores blancas, almizcle suave", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/bharara-niche.jpg" },
+                { nombre: "BHARARA SCARLET", descripcion: "Frutal dulce, rosa, vainilla, ámbar", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/bharara-scarlet.jpg" },
+                { nombre: "ERBA PURA XERJOFF", descripcion: "Cítricos mediterráneos, frutas dulces, almizcle blanco, ámbar", precio: "$100.000", badge: "Premium", imagen: "imagenes/lujo/erba-pura-xerjoff.jpg" },
+                { nombre: "AFEEF LATTAFA", descripcion: "Especias árabes, oud, ámbar, dulzor balsámico", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/afeef-lattafa.jpg" },
+                { nombre: "OUD FOR GLORY", descripcion: "Oud intenso, especias cálidas, pachulí, ámbar", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/oud-for-glory.jpg" },
+                { nombre: "HONOR Y GLORY", descripcion: "Oud fresco, especiado, madera seca", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/honor-y-glory.jpg" },
+                { nombre: "SUBLIME", descripcion: "Frutas tropicales, flores frescas, almizcle ligero", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/sublime.jpg" },
+                { nombre: "AMETHYST", descripcion: "Rosa, frutos rojos, violeta, almizcle", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/amethyst.jpg" },
+                { nombre: "NOBLE BLUSH", descripcion: "Vainilla gourmand, caramelo, flores dulces", precio: "$100.000", badge: "Exclusivo", imagen: "imagenes/lujo/noble-blush.jpg" },
+                { nombre: "FAKHAR BLACK", descripcion: "Cítricos, especias, lavanda, ámbar, pachulí", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/fakhar-black.jpg" },
+                { nombre: "9 PM NIGHT OUT", descripcion: "Manzana, canela, lavanda, bergamota, vainilla, tonka, ámbar", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/9pm-night.jpg" },
+                { nombre: "KHAMRAH", descripcion: "Canela, nuez moscada, dátiles, praliné, vainilla, tonka, ámbar", precio: "$100.000", badge: "Popular", imagen: "imagenes/lujo/khamrah.jpg" },
+                { nombre: "KHAMRAH QAHWA", descripcion: "Café especiado, vainilla, ámbar, dulzor gourmand", precio: "$100.000", badge: "Popular", imagen: "imagenes/lujo/khamrah-qahwa.jpg" },
+                { nombre: "KHAMRAH DUKHAN", descripcion: "Especias ahumadas, oud, vainilla, ámbar", precio: "$100.000", badge: "Nuevo", imagen: "imagenes/lujo/khamrah-dukhan.jpg" },
+                { nombre: "ART OF UNIVERSE", descripcion: "Cítricos frescos, flores blancas, dulzor elegante", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/art-of-universe.jpg" },
+                { nombre: "MUSAMAM", descripcion: "Oud, especias árabes, cuero, ámbar", precio: "$100.000", badge: "Exclusivo", imagen: "imagenes/lujo/musamam.jpg" },
+                { nombre: "HIS CONFESSION", descripcion: "Maderas intensas, vainilla, ámbar, especias dulces", precio: "$100.000", badge: "Kit", imagen: "imagenes/lujo/his-confession.jpg" },
+                { nombre: "KIT DE YARA Y ASAD", descripcion: "Pimienta negra, tabaco, piña, café, iris, vainilla, ámbar", precio: "$160.000", badge: "Kit", imagen: "imagenes/lujo/kit-yara-asad.jpg" },
+                { nombre: "IL-MIN FEMME", descripcion: "Flores blancas, cítricos suaves, almizcle", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/il-min-femme.jpg" },
+                { nombre: "IL-MIN KAKUNO", descripcion: "Cítricos frescos, flores delicadas, almizcle", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/il-min-kakuno.jpg" },
+                { nombre: "IL-MIN ROSO", descripcion: "Rosas intensas, flores rojas, almizcle", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/il-min-roso.jpg" },
+                { nombre: "OUD SAFFRON", descripcion: "Oud, azafrán, especias orientales, ámbar", precio: "$100.000", badge: "Premium", imagen: "imagenes/lujo/oud-saffron.jpg" },
+                { nombre: "VELVET GOLD", descripcion: "Pachulí, polvo atalcado, dulzor ambarado", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/velvet-gold.jpg" },
+                { nombre: "ORIENTICA ROJA", descripcion: "Cítricos, maderas, especias intensas", precio: "$100.000", badge: "Premium", imagen: "imagenes/lujo/orientica-roja.jpg" },
+                { nombre: "EMEER", descripcion: "Cítricos, madera aromática, ámbar", precio: "$100.000", badge: "Premium", imagen: "imagenes/lujo/emeer.jpg" },
+                { nombre: "AMBER OUD GOLD", descripcion: "Ámbar dorado, vainilla, especias suaves", precio: "$100.000", badge: "Premium", imagen: "imagenes/lujo/amber-oud-gold.jpg" },
+                { nombre: "AMBER ULTRA VIOLET", descripcion: "Ámbar, flores violetas, dulzor sofisticado", precio: "$100.000", badge: "Premium", imagen: "imagenes/lujo/amber-ultra-violet.jpg" },
+                { nombre: "SHAHEEN GOLD", descripcion: "Dulzor elegante, especias suaves, ámbar", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/shaheen-gold.jpg" },
+                { nombre: "SHAHEEN SILVER", descripcion: "Frescor cítrico, especias ligeras, madera blanca", precio: "$100.000", badge: "Lujo", imagen: "imagenes/lujo/shaheen-silver.jpg" },
+                { nombre: "HAYA", descripcion: "Flores dulces, jazmín, vainilla, ámbar", precio: "$100.000", badge: "Popular", imagen: "imagenes/lujo/haya.jpg" },
+                { nombre: "AJWAD", descripcion: "Frutas tropicales, dulzor avainillado, ámbar", precio: "$100.000", badge: "Divertido", imagen: "imagenes/lujo/ajwad.jpg" },
+                { nombre: "YUM YUM", descripcion: "Gourmand dulce, vainilla, caramelo", precio: "$100.000", badge: "Verano", imagen: "imagenes/lujo/yum-yum.jpg" },
+                { nombre: "ISLAND BLISS BREEZER", descripcion: "Frutas tropicales, coco, flores exóticas", precio: "$100.000", badge: "Exótico", imagen: "imagenes/lujo/island-bliss-breezer.jpg" },
+                { nombre: "ISLAND BLISS", descripcion: "Frutas tropicales, coco, flores exóticas", precio: "$100.000", badge: "Exótico", imagen: "imagenes/lujo/island-bliss.jpg" },
+                { nombre: "VANILLA FREAK", descripcion: "Vainilla intensa, tonka, caramelo", precio: "$110.000", badge: "Gourmand", imagen: "imagenes/lujo/vanilla-freak.jpg" },
+                { nombre: "MALLOW MADNESS", descripcion: "Marshmallow, vainilla, azúcar glas", precio: "$110.000", badge: "Gourmand", imagen: "imagenes/lujo/mallow-madness.jpg" },
+                { nombre: "BERRY ON TOP", descripcion: "Frutos rojos, frambuesa, grosella negra, vainilla", precio: "$110.000", badge: "Gourmand", imagen: "imagenes/lujo/berry-on-top.jpg" },
+                { nombre: "COOKIE GRAVE", descripcion: "Galleta dulce, vainilla, cacao", precio: "$110.000", badge: "Gourmand", imagen: "imagenes/lujo/cookie-grave.jpg" },
+                { nombre: "WHIPPED PLEASURE", descripcion: "Crema batida, vainilla, caramelo suave", precio: "$110.000", badge: "Gourmand", imagen: "imagenes/lujo/whipped-pleasure.jpg" }
+            ]
+        };
+
+        // ========== LÓGICA DEL CARRITO ==========
+        let carrito = [];
+
+        function generateProductCards(category) {
+            const container = document.getElementById(`${category}-products`);
+            const products = productos[category];
+            let html = '';
+            
+            products.forEach(product => {
+                html += `
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="${product.imagen}" alt="${product.nombre}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-spray-can\'></i>'">
+                            ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-name">${product.nombre}</h3>
+                            <p class="product-description">${product.descripcion}</p>
+                            <div class="product-price">
+                                <span>${product.precio}</span>
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <button class="btn-agregar" onclick="agregarAlCarrito('${product.nombre}', '${product.precio}')">
+                                <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function agregarAlCarrito(nombre, precio) {
+            carrito.push({ nombre, precio });
+            actualizarContadorCarrito();
+            
+            // Efecto visual de confirmación
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> ¡Agregado!';
+            btn.style.background = '#27ae60';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = '';
+            }, 1500);
+        }
+
+        function actualizarContadorCarrito() {
+            document.getElementById('cart-count').innerText = carrito.length;
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                setTimeout(() => { modal.style.display = 'none'; }, 300);
+            } else {
+                modal.style.display = 'flex';
+                setTimeout(() => { modal.classList.add('active'); }, 10);
+                renderizarCarrito();
+            }
+        }
+
+        function renderizarCarrito() {
+            const container = document.getElementById('cart-items');
+            const totalElement = document.getElementById('cart-total-amount');
+            
+            if (carrito.length === 0) {
+                container.innerHTML = '<p class="cart-empty">Tu carrito está vacío</p>';
+                totalElement.innerText = '$0';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+
+            carrito.forEach((item, index) => {
+                // Convertir precio a número para sumar (ej: "$80.000" -> 80000)
+                const precioNumerico = parseInt(item.precio.replace(/[^0-9]/g, ''));
+                total += precioNumerico;
+
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <h4>${item.nombre}</h4>
+                            <p>${item.precio}</p>
+                        </div>
+                        <button class="cart-item-remove" onclick="eliminarDelCarrito(${index})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            totalElement.innerText = '$' + total.toLocaleString('es-CO');
+        }
+
+        function eliminarDelCarrito(index) {
+            carrito.splice(index, 1);
+            actualizarContadorCarrito();
+            renderizarCarrito();
+        }
+
+        function enviarPedidoWhatsApp() {
+            if (carrito.length === 0) {
+                alert("Tu carrito está vacío. Agrega productos antes de finalizar.");
+                return;
+            }
+
+            let mensaje = "¡Hola MELNE!  Quiero realizar el siguiente pedido:%0A%0A";
+            let total = 0;
+
+            carrito.forEach(item => {
+                mensaje += `▪️ ${item.nombre} - ${item.precio}%0A`;
+                total += parseInt(item.precio.replace(/[^0-9]/g, ''));
+            });
+
+            mensaje += `%0A*TOTAL A PAGAR: $${total.toLocaleString('es-CO')}*%0A%0A`;
+            mensaje += " *Mis datos de envío son:*%0A";
+            mensaje += "Nombre: %0A";
+            mensaje += "Dirección: %0A";
+            mensaje += "Teléfono: %0A%0A";
+            mensaje += "Quedo atento a la confirmación. ¡Gracias!";
+
+            const numeroWhatsApp = "573105832356"; 
+            const url = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
+            
+            window.open(url, '_blank');
+        }
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                document.querySelectorAll('.category-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                const sectionId = link.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            generateProductCards('hombre');
+            generateProductCards('mujer');
+            generateProductCards('lujo');
+        });
+    </script>
+</body>
+</html>
