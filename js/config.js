@@ -4,7 +4,7 @@
 // La clave "anon" / "publishable" es pública: está pensada para ir en la página web.
 // NUNCA pegues aquí la clave "service_role" / "secret".
 window.MELNE_CONFIG = {
-    supabaseUrl: 'PEGA_AQUI_TU_PROJECT_URL',
-    supabaseKey: 'PEGA_AQUI_TU_ANON_KEY',
+    supabaseUrl: 'https://sqxdutpumhfetqbspptw.supabase.co',
+    supabaseKey: 'sb_publishable_eSJRMO3-shJyHTURwAc9oQ_xqSUX4yb',
     whatsapp: '573105832356'
 };
