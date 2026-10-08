@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>MELNE · Administración de productos</title>
+    <meta name="theme-color" content="#0B2447">
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-blue: #0B2447;
+            --secondary-blue: #19376D;
+            --light-blue: #E8F1F8;
+            --dark-blue: #05162B;
+            --white: #ffffff;
+            --black: #111827;
+            --gray: #4B5563;
+            --muted: #6B7280;
+            --line: #E3E8EF;
+            --bg: #F5F7FA;
+            --gold-accent: #C5A059;
+            --gold-soft: #F7F0E1;
+            --danger: #B42318;
+            --danger-soft: #FEF3F2;
+            --danger-line: #FDA29B;
+            --success: #067647;
+            --success-soft: #ECFDF3;
+        }
+
+        body { background: var(--bg); color: var(--black); font-family: 'Montserrat', sans-serif; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+        body.no-scroll { overflow: hidden; }
+        h1, h2, .brand-name { font-family: 'Playfair Display', serif; }
+        button, input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+        [hidden] { display: none !important; }
+        :focus-visible { outline: 3px solid var(--gold-accent); outline-offset: 2px; }
+
+        /* ===== Barra superior ===== */
+        .topbar { background: linear-gradient(135deg, var(--dark-blue) 0%, var(--primary-blue) 100%); color: var(--white); position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 10px rgba(0,0,0,0.18); }
+        .topbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.7rem 1.5rem; min-height: 68px; }
+        .brand { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; color: inherit; }
+        .brand-logo { width: 46px; height: 46px; border-radius: 50%; background: var(--white); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .brand-logo img { width: 90%; height: 90%; object-fit: contain; }
+        .brand-name { font-size: 1.4rem; letter-spacing: 3px; line-height: 1; }
+        .brand-sub { font-size: 0.6rem; letter-spacing: 3px; color: var(--gold-accent); text-transform: uppercase; font-weight: 600; margin-top: 3px; }
+        .topbar-right { display: flex; align-items: center; gap: 1.2rem; }
+        .topbar-note { font-size: 0.8rem; opacity: 0.85; }
+        .user-chip { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.35rem 0.4rem 0.35rem 0.8rem; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
+        .user-chip i { color: var(--gold-accent); }
+        .btn-salir { background: transparent; border: none; color: var(--white); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+        .btn-salir:hover { background: rgba(255,255,255,0.15); }
+
+        /* ===== Estructura ===== */
+        .layout { flex: 1; display: grid; grid-template-columns: 260px 1fr; }
+        .sidebar { background: var(--white); border-right: 1px solid var(--line); padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; position: sticky; top: 68px; height: calc(100vh - 68px); }
+        .side-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 2px; color: var(--muted); padding: 0 0.6rem; }
+        .side-item { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem; border-radius: 8px; background: var(--light-blue); border-left: 3px solid var(--gold-accent); text-decoration: none; color: var(--primary-blue); }
+        .side-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--primary-blue); color: var(--white); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .side-item strong { display: block; font-size: 0.92rem; }
+        .side-item small { color: var(--muted); font-size: 0.75rem; }
+        .side-link { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0.7rem; color: var(--gray); text-decoration: none; font-size: 0.85rem; border-radius: 8px; }
+        .side-link:hover { background: var(--bg); color: var(--primary-blue); }
+        .side-note { margin-top: auto; padding: 1.1rem; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); }
+        .side-note i { color: var(--gold-accent); }
+        .side-note h3 { font-family: 'Playfair Display', serif; color: var(--primary-blue); font-size: 1rem; margin: 0.4rem 0 0.3rem; }
+        .side-note p { font-size: 0.78rem; color: var(--gray); }
+        .side-note .badge-lock { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.7rem; font-size: 0.72rem; font-weight: 600; color: var(--primary-blue); }
+
+        .content { padding: 2rem 2.5rem 3rem; min-width: 0; }
+        .admin-footer { text-align: center; color: var(--muted); font-size: 0.78rem; padding: 1.2rem; border-top: 1px solid var(--line); background: var(--white); }
+
+        /* ===== Encabezado de página ===== */
+        .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .page-head h1 { color: var(--primary-blue); font-size: 2rem; line-height: 1.2; }
+        .page-head p { color: var(--gray); font-size: 0.92rem; margin-top: 0.2rem; }
+        .page-head .required-note { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+        .pill-editing { background: var(--gold-soft); color: #8a6a26; border: 1px solid #ead9b3; font-weight: 600; font-size: 0.72rem; padding: 0.15rem 0.6rem; border-radius: 999px; }
+
+        /* ===== Botones ===== */
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1.2rem; border-radius: 8px; border: 1px solid transparent; font-weight: 600; font-size: 0.88rem; cursor: pointer; text-decoration: none; transition: background 0.15s, border-color 0.15s, color 0.15s; white-space: nowrap; }
+        .btn-primary { background: var(--primary-blue); color: var(--white); }
+        .btn-primary:hover { background: var(--secondary-blue); }
+        .btn-ghost { background: var(--white); color: var(--primary-blue); border-color: var(--line); }
+        .btn-ghost:hover { border-color: var(--primary-blue); }
+        .btn-danger { background: var(--danger); color: var(--white); }
+        .btn-danger:hover { background: #912018; }
+        .btn:disabled { opacity: 0.6; cursor: wait; }
+        .btn-sm { padding: 0.4rem 0.7rem; font-size: 0.78rem; border-radius: 6px; }
+        .btn-edit { background: var(--white); color: var(--primary-blue); border-color: #c9d6e6; }
+        .btn-edit:hover { background: var(--light-blue); }
+        .btn-del { background: var(--white); color: var(--danger); border-color: #f4c7c3; }
+        .btn-del:hover { background: var(--danger-soft); }
+
+        /* ===== Tarjeta / herramientas ===== */
+        .card { background: var(--white); border: 1px solid var(--line); border-radius: 12px; }
+        .toolbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding: 1.2rem 1.4rem; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+        .search-field { flex: 1 1 320px; max-width: 460px; }
+        .search-field label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--gray); margin-bottom: 0.35rem; }
+        .search-wrap { position: relative; }
+        .search-wrap i { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 0.85rem; }
+        .search-wrap input { width: 100%; padding: 0.65rem 0.9rem 0.65rem 2.3rem; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
+        .search-wrap input:focus { outline: none; border-color: var(--secondary-blue); background: var(--white); box-shadow: 0 0 0 3px rgba(25,55,109,0.12); }
+        .chips { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .chip { padding: 0.5rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: var(--white); font-size: 0.82rem; font-weight: 600; color: var(--gray); cursor: pointer; }
+        .chip:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+        .chip.active { background: var(--primary-blue); border-color: var(--primary-blue); color: var(--white); }
+        .list-meta { display: flex; justify-content: space-between; gap: 1rem; padding: 0.8rem 1.4rem; font-size: 0.8rem; color: var(--muted); border-bottom: 1px solid var(--line); }
+        .list-meta strong { color: var(--primary-blue); }
+
+        /* ===== Tabla ===== */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+        th { text-align: left; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-weight: 700; padding: 0.8rem 1rem; background: #FAFBFC; border-bottom: 1px solid var(--line); white-space: nowrap; }
+        td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--line); vertical-align: middle; }
+        tbody tr:hover { background: #FAFCFE; }
+        .code { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.8rem; color: var(--secondary-blue); font-weight: 600; white-space: nowrap; }
+        .prod-cell { display: flex; align-items: center; gap: 0.8rem; min-width: 240px; }
+        .thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: var(--light-blue); flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: var(--primary-blue); font-size: 1rem; }
+        .prod-name { font-weight: 700; color: var(--black); }
+        .prod-desc { color: var(--muted); font-size: 0.78rem; }
+        .num { white-space: nowrap; font-weight: 600; }
+        .qty-zero { color: var(--danger); }
+        .status { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.65rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+        .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+        .status.activo { background: var(--success-soft); color: var(--success); }
+        .status.inactivo { background: #F2F4F7; color: var(--gray); }
+        .actions { display: flex; gap: 0.4rem; white-space: nowrap; }
+
+        /* ===== Tarjetas móviles ===== */
+        .mobile-list { display: none; }
+        .m-card { padding: 1rem 1.2rem; border-bottom: 1px solid var(--line); }
+        .m-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .m-body { display: flex; gap: 0.8rem; }
+        .m-cat { font-size: 0.75rem; color: var(--secondary-blue); font-weight: 600; }
+        .m-bottom { display: flex; justify-content: space-between; align-items: center; margin: 0.6rem 0; font-size: 0.85rem; }
+        .m-card .actions .btn { flex: 1; }
+
+        .empty { padding: 3rem 1.5rem; text-align: center; color: var(--gray); }
+        .empty i { font-size: 2.2rem; color: var(--gold-accent); margin-bottom: 0.8rem; }
+        .empty h3 { font-family: 'Playfair Display', serif; color: var(--primary-blue); margin-bottom: 0.4rem; }
+        .import-box { max-width: 420px; margin: 1.2rem auto 0; text-align: left; }
+
+        .pager { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.9rem 1.4rem; font-size: 0.8rem; color: var(--muted); flex-wrap: wrap; }
+        .pages { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+        .pages button { min-width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--line); background: var(--white); cursor: pointer; font-weight: 600; font-size: 0.8rem; color: var(--gray); }
+        .pages button.active { background: var(--primary-blue); border-color: var(--primary-blue); color: var(--white); }
+        .pages button:disabled { opacity: 0.4; cursor: default; }
+
+        .loading { padding: 3rem; text-align: center; color: var(--muted); }
+
+        /* ===== Formulario ===== */
+        .form-layout { display: grid; grid-template-columns: 1fr 290px; gap: 1.5rem; align-items: start; }
+        .form-card { padding: 0.5rem 1.6rem 1.4rem; }
+        .form-section { padding: 1.3rem 0; border-bottom: 1px solid var(--line); }
+        .form-section:last-of-type { border-bottom: none; }
+        .section-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1rem; }
+        .section-num { width: 30px; height: 30px; border-radius: 50%; background: var(--gold-soft); color: #8a6a26; font-weight: 700; font-size: 0.78rem; display: flex; align-items: center; justify-content: center; }
+        .section-head h2 { font-family: 'Montserrat', sans-serif; font-size: 1rem; color: var(--primary-blue); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; }
+        .field { margin-bottom: 1rem; }
+        .grid-2 .field { margin-bottom: 0; }
+        .field label, .field .label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--black); margin-bottom: 0.35rem; }
+        .field label .req { color: var(--danger); }
+        .field input[type="text"], .field select, .field textarea { width: 100%; padding: 0.7rem 0.85rem; border: 1px solid #CDD5DF; border-radius: 8px; background: var(--white); transition: border-color 0.15s, box-shadow 0.15s; }
+        .field textarea { min-height: 90px; resize: vertical; }
+        .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--secondary-blue); box-shadow: 0 0 0 3px rgba(25,55,109,0.12); }
+        .hint { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+        .err { display: none; font-size: 0.78rem; color: var(--danger); margin-top: 0.3rem; font-weight: 500; }
+        .err::before { content: '\f06a'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-right: 0.35rem; }
+        .field.invalid input, .field.invalid select, .field.invalid textarea, .field.invalid .file-row { border-color: var(--danger); background: var(--danger-soft); }
+        .field.invalid .err { display: block; }
+
+        .file-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.6rem; border: 1px dashed #CDD5DF; border-radius: 8px; }
+        .file-preview { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; background: var(--light-blue); display: flex; align-items: center; justify-content: center; color: var(--primary-blue); flex-shrink: 0; }
+        .file-info { flex: 1; min-width: 0; }
+        .file-name { font-size: 0.85rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-name.vacio { color: var(--muted); font-weight: 400; }
+        .file-row input[type="file"] { display: none; }
+        .link-btn { background: none; border: none; color: var(--danger); font-size: 0.75rem; cursor: pointer; padding: 0; text-decoration: underline; }
+
+        .form-actions { display: flex; justify-content: flex-end; gap: 0.7rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+
+        .error-summary { background: var(--danger-soft); border: 1px solid var(--danger-line); border-left: 4px solid var(--danger); border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; color: #7A271A; }
+        .error-summary h2 { font-family: 'Montserrat', sans-serif; font-size: 0.98rem; color: var(--danger); display: flex; align-items: center; gap: 0.5rem; }
+        .error-summary p { font-size: 0.85rem; margin-top: 0.3rem; }
+        .error-summary ul { margin: 0.5rem 0 0.5rem 1.2rem; font-size: 0.85rem; }
+        .error-summary li { margin: 0.15rem 0; }
+        .error-summary a { color: inherit; font-weight: 600; }
+        .error-summary .keep { font-size: 0.8rem; opacity: 0.85; }
+
+        .tip { padding: 1.3rem; background: var(--light-blue); border: 1px solid #d3e2ef; border-radius: 12px; position: sticky; top: 90px; }
+        .tip i.tip-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--white); color: var(--gold-accent); display: flex; align-items: center; justify-content: center; margin-bottom: 0.7rem; }
+        .tip h3 { font-family: 'Playfair Display', serif; color: var(--primary-blue); font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .tip p { font-size: 0.82rem; color: var(--gray); margin-bottom: 0.6rem; }
+
+        /* ===== Modales ===== */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(5, 22, 43, 0.6); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+        .modal { background: var(--white); border-radius: 14px; width: 100%; max-width: 440px; padding: 1.6rem; box-shadow: 0 20px 40px rgba(0,0,0,0.25); transform: translateY(10px); transition: transform 0.2s; }
+        .modal-overlay.open .modal { transform: none; }
+        .modal-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--danger-soft); color: var(--danger); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 0.8rem; }
+        .modal h2 { font-family: 'Playfair Display', serif; color: var(--primary-blue); font-size: 1.35rem; }
+        .modal > p { color: var(--gray); font-size: 0.88rem; margin: 0.3rem 0 1rem; }
+        .del-product { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 0.9rem 1rem; }
+        .del-product strong { color: var(--black); }
+        .del-product .meta { font-size: 0.78rem; color: var(--secondary-blue); font-weight: 600; margin: 0.15rem 0; }
+        .del-product .desc { font-size: 0.8rem; color: var(--gray); }
+        .del-product .stock { font-size: 0.82rem; font-weight: 600; margin-top: 0.4rem; }
+        .warn { font-size: 0.82rem; color: var(--danger); font-weight: 600; margin: 0.9rem 0 0.3rem; }
+        .modal .note { font-size: 0.8rem; color: var(--muted); }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.3rem; }
+
+        /* ===== Ingreso ===== */
+        .login-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem 16px; }
+        .login-card { width: 100%; max-width: 400px; padding: 2rem; }
+        .login-card h1 { color: var(--primary-blue); font-size: 1.6rem; }
+        .login-card > p { color: var(--gray); font-size: 0.88rem; margin: 0.3rem 0 1.4rem; }
+        .login-card input[type="email"], .login-card input[type="password"] { width: 100%; padding: 0.7rem 0.85rem; border: 1px solid #CDD5DF; border-radius: 8px; }
+        .login-card .btn { width: 100%; margin-top: 0.5rem; }
+        .form-alert { background: var(--danger-soft); border: 1px solid var(--danger-line); color: var(--danger); padding: 0.7rem 0.9rem; border-radius: 8px; font-size: 0.83rem; margin-bottom: 1rem; }
+        .info-box { background: var(--gold-soft); border: 1px solid #ead9b3; color: #6b5220; padding: 1rem 1.2rem; border-radius: 10px; font-size: 0.88rem; }
+        .info-box code { background: rgba(255,255,255,0.7); padding: 0.1rem 0.35rem; border-radius: 4px; }
+
+        /* ===== Aviso ===== */
+        .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: var(--dark-blue); color: var(--white); padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.88rem; display: flex; align-items: center; gap: 0.6rem; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 200; max-width: calc(100% - 32px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
+        .toast.error { background: var(--danger); }
+        .toast i { color: var(--gold-accent); }
+        .toast.error i { color: var(--white); }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 1100px) {
+            .form-layout { grid-template-columns: 1fr; }
+            .tip { position: static; }
+        }
+        @media (max-width: 860px) {
+            .topbar-inner { padding: 0.6rem 1rem; min-height: 60px; }
+            .topbar-note { display: none; }
+            .brand-logo { width: 40px; height: 40px; }
+            .brand-name { font-size: 1.2rem; }
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { position: static; height: auto; flex-direction: row; align-items: center; padding: 0.6rem 1rem; border-right: none; border-bottom: 1px solid var(--line); overflow-x: auto; }
+            .side-label, .side-note { display: none; }
+            .side-item { padding: 0.45rem 0.7rem; flex-shrink: 0; }
+            .side-icon { width: 30px; height: 30px; font-size: 0.85rem; }
+            .side-link { flex-shrink: 0; }
+            .content { padding: 1.4rem 1rem 2.5rem; }
+            .page-head h1 { font-size: 1.6rem; }
+            .page-head .btn { width: 100%; }
+            .table-wrap { display: none; }
+            .mobile-list { display: block; }
+            .toolbar { padding: 1rem; }
+            .search-field { max-width: none; }
+            .list-meta, .pager { padding-left: 1rem; padding-right: 1rem; }
+            .grid-2 { grid-template-columns: 1fr; gap: 0; }
+            .grid-2 .field { margin-bottom: 1rem; }
+            .form-card { padding: 0.3rem 1rem 1rem; }
+            .form-actions { flex-direction: column-reverse; }
+            .form-actions .btn { width: 100%; }
+            .file-row { flex-wrap: wrap; }
+            .file-row .btn { width: 100%; }
+            .modal-actions { flex-direction: column-reverse; }
+            .modal-actions .btn { width: 100%; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { transition: none !important; animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="#/productos">
+                <span class="brand-logo"><img src="logo.png" alt="" width="40" height="40"></span>
+                <span>
+                    <span class="brand-name">MELNE</span>
+                    <span class="brand-sub" style="display:block">Perfumes & Esencias</span>
+                </span>
+            </a>
+            <div class="topbar-right">
+                <span class="topbar-note">Área de gestión · Acceso autorizado</span>
+                <span class="user-chip" id="user-chip" hidden>
+                    <i class="fas fa-user-shield"></i> Administrador
+                    <button type="button" class="btn-salir" id="btn-salir" title="Cerrar sesión" aria-label="Cerrar sesión"><i class="fas fa-sign-out-alt"></i></button>
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== Ingreso ===== -->
+    <div class="login-wrap" id="vista-login" hidden>
+        <form class="card login-card" id="form-login" novalidate>
+            <h1>Iniciar sesión</h1>
+            <p>Ingresa con tu cuenta de administrador para gestionar el catálogo.</p>
+            <div class="form-alert" id="login-error" hidden></div>
+            <div class="field">
+                <label for="login-email">Correo</label>
+                <input type="email" id="login-email" autocomplete="username" required>
+            </div>
+            <div class="field">
+                <label for="login-pass">Contraseña</label>
+                <input type="password" id="login-pass" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="btn-login"><i class="fas fa-lock"></i> Entrar</button>
+        </form>
+    </div>
+
+    <!-- ===== Falta configuración ===== -->
+    <div class="login-wrap" id="vista-config" hidden>
+        <div class="card login-card">
+            <h1>Falta conectar la base de datos</h1>
+            <p>El panel necesita Supabase para guardar los productos.</p>
+            <div class="info-box">
+                Abre <code>js/config.js</code> y pega tu <strong>Project URL</strong> y tu clave <strong>anon/publishable</strong>.
+                Los pasos completos están en <code>INSTRUCCIONES.md</code>.
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Panel ===== -->
+    <div class="layout" id="vista-panel" hidden>
+        <aside class="sidebar">
+            <span class="side-label">ADMINISTRACIÓN</span>
+            <a class="side-item" href="#/productos">
+                <span class="side-icon"><i class="fas fa-spray-can"></i></span>
+                <span><strong>Productos</strong><small>Catálogo e inventario</small></span>
+            </a>
+            <a class="side-link" href="index.html" target="_blank" rel="noopener"><i class="fas fa-store"></i> Ver tienda</a>
+            <div class="side-note">
+                <i class="fas fa-gem"></i>
+                <h3>Un catálogo bien cuidado.</h3>
+                <p>Gestiona la información que presenta la tienda MELNE.</p>
+                <span class="badge-lock"><i class="fas fa-lock"></i> Solo personal autorizado</span>
+            </div>
+        </aside>
+
+        <main class="content">
+            <!-- ===== LISTADO ===== -->
+            <section id="vista-lista" hidden>
+                <div class="page-head">
+                    <div>
+                        <h1>Productos</h1>
+                        <p>Mantén tu catálogo y sus existencias al día.</p>
+                    </div>
+                    <a class="btn btn-primary" href="#/registrar"><i class="fas fa-plus"></i> Registrar producto</a>
+                </div>
+
+                <div class="card">
+                    <div class="toolbar">
+                        <div class="search-field">
+                            <label for="buscar">Buscar productos</label>
+                            <div class="search-wrap">
+                                <i class="fas fa-search"></i>
+                                <input type="search" id="buscar" placeholder="Buscar por nombre o código" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="chips" role="group" aria-label="Filtrar por categoría">
+                            <button type="button" class="chip active" data-cat="">Todos</button>
+                            <button type="button" class="chip" data-cat="Hombre">Hombre</button>
+                            <button type="button" class="chip" data-cat="Mujer">Mujer</button>
+                            <button type="button" class="chip" data-cat="Lujo">Lujo</button>
+                        </div>
+                    </div>
+                    <div class="list-meta">
+                        <span id="meta-guardados"><strong>0</strong> productos guardados</span>
+                        <span>Precio en COP</span>
+                    </div>
+                    <div id="lista-contenido"><div class="loading"><i class="fas fa-spinner fa-spin"></i> Cargando productos…</div></div>
+                    <div class="pager" id="pager" hidden>
+                        <span id="pager-info"></span>
+                        <div class="pages" id="pages"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== REGISTRO / EDICIÓN ===== -->
+            <section id="vista-form" hidden>
+                <div class="page-head">
+                    <div>
+                        <h1 id="form-titulo">Registrar producto</h1>
+                        <p id="form-subtitulo">Añade una nueva fragancia al catálogo de MELNE.</p>
+                        <p class="required-note">Los campos con * son obligatorios. <span class="pill-editing" id="pill-editando" hidden>Editando</span></p>
+                    </div>
+                </div>
+
+                <div class="form-layout">
+                    <div>
+                        <div class="error-summary" id="error-summary" tabindex="-1" role="alert" hidden>
+                            <h2><i class="fas fa-exclamation-circle"></i> <span id="error-titulo">No se pudo registrar el producto</span></h2>
+                            <p id="error-conteo"></p>
+                            <ul id="error-lista"></ul>
+                            <p class="keep" id="error-pie">Los demás datos ingresados se conservan.</p>
+                        </div>
+
+                        <form class="card form-card" id="form-producto" novalidate>
+                            <div class="form-section">
+                                <div class="section-head"><span class="section-num">01</span><h2>Información del producto</h2></div>
+                                <div class="grid-2">
+                                    <div class="field" data-field="codigo">
+                                        <label for="f-codigo">Código <span class="req">*</span></label>
+                                        <input type="text" id="f-codigo" maxlength="30" autocomplete="off" spellcheck="false">
+                                        <p class="hint">Identificador interno único. Ej.: MEL-H001.</p>
+                                        <p class="err" id="e-codigo"></p>
+                                    </div>
+                                    <div class="field" data-field="nombre">
+                                        <label for="f-nombre">Nombre <span class="req">*</span></label>
+                                        <input type="text" id="f-nombre" maxlength="120" autocomplete="off">
+                                        <p class="err" id="e-nombre"></p>
+                                    </div>
+                                </div>
+                                <div class="field" data-field="categoria" style="margin-top:1rem">
+                                    <label for="f-categoria">Categoría <span class="req">*</span></label>
+                                    <select id="f-categoria">
+                                        <option value="">Selecciona una categoría</option>
+                                        <option value="Hombre">Hombre</option>
+                                        <option value="Mujer">Mujer</option>
+                                        <option value="Lujo">Lujo</option>
+                                    </select>
+                                    <p class="err" id="e-categoria"></p>
+                                    <p class="hint">Opciones: Hombre, Mujer o Lujo.</p>
+                                </div>
+                                <div class="field" data-field="descripcion">
+                                    <label for="f-descripcion">Descripción aromática <span class="req">*</span></label>
+                                    <textarea id="f-descripcion" maxlength="300"></textarea>
+                                    <p class="err" id="e-descripcion"></p>
+                                    <p class="hint">Describe las notas y el carácter de la fragancia.</p>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <div class="section-head"><span class="section-num">02</span><h2>Precio e inventario</h2></div>
+                                <div class="grid-2">
+                                    <div class="field" data-field="precio">
+                                        <label for="f-precio">Precio (COP) <span class="req">*</span></label>
+                                        <input type="text" id="f-precio" inputmode="numeric" autocomplete="off">
+                                        <p class="err" id="e-precio"></p>
+                                        <p class="hint">Pesos colombianos. Debe ser mayor que 0.</p>
+                                    </div>
+                                    <div class="field" data-field="cantidad">
+                                        <label for="f-cantidad">Cantidad disponible <span class="req">*</span></label>
+                                        <input type="text" id="f-cantidad" inputmode="numeric" autocomplete="off">
+                                        <p class="err" id="e-cantidad"></p>
+                                        <p class="hint">Número entero igual o mayor que 0.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <div class="section-head"><span class="section-num">03</span><h2>Presentación y visibilidad</h2></div>
+                                <div class="field" data-field="imagen">
+                                    <span class="label">Imagen (opcional)</span>
+                                    <div class="file-row">
+                                        <span class="file-preview" id="f-preview"><i class="fas fa-image"></i></span>
+                                        <div class="file-info">
+                                            <div class="file-name vacio" id="f-imagen-nombre">Ningún archivo seleccionado</div>
+                                            <div class="hint" id="f-imagen-hint">JPG o PNG · Máximo 5 MB</div>
+                                            <button type="button" class="link-btn" id="f-quitar-imagen" hidden>Quitar imagen</button>
+                                        </div>
+                                        <label class="btn btn-ghost btn-sm" for="f-imagen" id="f-imagen-btn">Elegir imagen</label>
+                                        <input type="file" id="f-imagen" accept="image/jpeg,image/png">
+                                    </div>
+                                    <p class="err" id="e-imagen"></p>
+                                </div>
+                                <div class="grid-2">
+                                    <div class="field" data-field="estado">
+                                        <label for="f-estado">Estado <span class="req">*</span></label>
+                                        <select id="f-estado">
+                                            <option value="">Selecciona un estado</option>
+                                            <option value="Activo">Activo</option>
+                                            <option value="Inactivo">Inactivo</option>
+                                        </select>
+                                        <p class="err" id="e-estado"></p>
+                                        <p class="hint">Activo: visible en la tienda. Inactivo: oculto, sin borrar el registro.</p>
+                                    </div>
+                                    <div class="field" data-field="etiqueta">
+                                        <label for="f-etiqueta">Etiqueta (opcional)</label>
+                                        <input type="text" id="f-etiqueta" maxlength="20" placeholder="Ej.: Nuevo, Popular, Premium" autocomplete="off">
+                                        <p class="hint">Se muestra sobre la foto en la tienda.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <a class="btn btn-ghost" href="#/productos">Cancelar</a>
+                                <button type="submit" class="btn btn-primary" id="btn-guardar">Registrar producto</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <aside class="tip">
+                        <i class="fas fa-lightbulb tip-icon"></i>
+                        <h3 id="tip-titulo">Antes de guardar</h3>
+                        <p id="tip-texto">Revisa el código, la categoría y las notas aromáticas para mantener un catálogo claro.</p>
+                        <p>El precio debe ser positivo y las existencias no pueden ser negativas ni tener decimales.</p>
+                        <p>La imagen es opcional. El estado define si el producto aparece en la tienda.</p>
+                    </aside>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="admin-footer">MELNE · Administración de productos</footer>
+
+    <!-- ===== Confirmar eliminación ===== -->
+    <div class="modal-overlay" id="modal-eliminar" aria-hidden="true">
+        <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="del-titulo">
+            <div class="modal-icon"><i class="fas fa-trash-alt"></i></div>
+            <h2 id="del-titulo">¿Eliminar este producto?</h2>
+            <p>Vas a retirar este registro del catálogo y de la gestión de inventario.</p>
+            <div class="del-product" id="del-producto"></div>
+            <p class="warn">Esta acción no se puede deshacer.</p>
+            <p class="note">Si solo deseas ocultarlo de la tienda, cambia su estado a Inactivo desde Editar.</p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-ghost" id="del-cancelar">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="del-confirmar"><i class="fas fa-trash-alt"></i> Eliminar producto</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/catalogo-inicial.js"></script>
+    <script src="js/datos.js"></script>
+    <script>
+        const { cliente: db, formatoCOP, normalizar, escapar } = MELNE;
+        const BUCKET = 'productos';
+        const POR_PAGINA = 20;
+        const MAX_BYTES = 5 * 1024 * 1024;
+        const PREFIJOS = { Hombre: 'MEL-H', Mujer: 'MEL-M', Lujo: 'MEL-L' };
+
+        const $ = (id) => document.getElementById(id);
+
+        let productos = [];
+        let cargado = false;
+        let filtro = { texto: '', categoria: '', pagina: 1 };
+        let editando = null;          // producto que se está editando (null = registro nuevo)
+        let archivoImagen = null;     // archivo nuevo elegido
+        let quitarImagen = false;     // el usuario quitó la imagen actual
+        let codigoSugerido = '';
+        let porEliminar = null;
+
+        // ========== AVISOS ==========
+        let tAviso;
+        function aviso(texto, tipo = 'ok') {
+            const t = $('toast');
+            t.className = 'toast show' + (tipo === 'error' ? ' error' : '');
+            t.innerHTML = `<i class="fas ${tipo === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${escapar(texto)}`;
+            clearTimeout(tAviso);
+            tAviso = setTimeout(() => t.classList.remove('show'), 3200);
+        }
+
+        // ========== SESIÓN ==========
+        function mostrarVista(nombre) {
+            $('vista-login').hidden = nombre !== 'login';
+            $('vista-config').hidden = nombre !== 'config';
+            $('vista-panel').hidden = nombre !== 'panel';
+            $('user-chip').hidden = nombre !== 'panel';
+        }
+
+        async function iniciar() {
+            if (!db) { mostrarVista('config'); return; }
+            const { data } = await db.auth.getSession();
+            if (data.session) await entrarAlPanel();
+            else mostrarVista('login');
+        }
+
+        async function entrarAlPanel() {
+            const { data: esAdmin, error } = await db.rpc('es_admin');
+            if (error || !esAdmin) {
+                await db.auth.signOut();
+                mostrarVista('login');
+                mostrarErrorLogin(error
+                    ? 'No se pudo verificar tu cuenta. Revisa que hayas ejecutado supabase/setup.sql.'
+                    : 'Esta cuenta no tiene permisos de administrador.');
+                return;
+            }
+            mostrarVista('panel');
+            enrutar();
+            cargarProductos();
+        }
+
+        function mostrarErrorLogin(texto) {
+            $('login-error').textContent = texto;
+            $('login-error').hidden = !texto;
+        }
+
+        $('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = $('login-email').value.trim();
+            const password = $('login-pass').value;
+            if (!email || !password) { mostrarErrorLogin('Escribe tu correo y tu contraseña.'); return; }
+            const btn = $('btn-login');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando…';
+            mostrarErrorLogin('');
+            const { error } = await db.auth.signInWithPassword({ email, password });
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-lock"></i> Entrar';
+            if (error) { mostrarErrorLogin('Correo o contraseña incorrectos.'); return; }
+            $('login-pass').value = '';
+            await entrarAlPanel();
+        });
+
+        $('btn-salir').addEventListener('click', async () => {
+            await db.auth.signOut();
+            productos = [];
+            cargado = false;
+            mostrarVista('login');
+        });
+
+        // ========== DATOS ==========
+        async function traerTodos() {
+            const todos = [];
+            for (let desde = 0; ; desde += 1000) {
+                const { data, error } = await db.from('productos').select('*').order('id').range(desde, desde + 999);
+                if (error) throw error;
+                todos.push(...data);
+                if (data.length < 1000) return todos;
+            }
+        }
+
+        async function cargarProductos() {
+            try {
+                productos = await traerTodos();
+                cargado = true;
+                pintarLista();
+                // Si se entró directo a #/editar/ID, completar el formulario ahora que hay datos.
+                if (location.hash.startsWith('#/editar/')) enrutar();
+            } catch (e) {
+                console.error(e);
+                $('lista-contenido').innerHTML = `<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>No se pudieron cargar los productos</h3><p>${escapar(e.message || 'Revisa tu conexión e inténtalo de nuevo.')}</p></div>`;
+            }
+        }
+
+        // ========== RUTAS ==========
+        function enrutar() {
+            if ($('vista-panel').hidden) return;
+            const ruta = location.hash || '#/productos';
+            const m = ruta.match(/^#\/editar\/(\d+)$/);
+            if (ruta === '#/registrar') abrirFormulario(null);
+            else if (m) {
+                if (!cargado) { mostrarSeccion('form'); return; }
+                const p = productos.find(x => String(x.id) === m[1]);
+                if (p) abrirFormulario(p);
+                else { aviso('Ese producto ya no existe.', 'error'); location.hash = '#/productos'; }
+            } else {
+                mostrarSeccion('lista');
+                if (cargado) pintarLista();
+            }
+        }
+        window.addEventListener('hashchange', enrutar);
+
+        function mostrarSeccion(nombre) {
+            $('vista-lista').hidden = nombre !== 'lista';
+            $('vista-form').hidden = nombre !== 'form';
+            window.scrollTo(0, 0);
+        }
+
+        // ========== LISTADO ==========
+        function filtrados() {
+            const palabras = normalizar(filtro.texto).split(/\s+/).filter(Boolean);
+            return productos.filter(p => {
+                if (filtro.categoria && p.categoria !== filtro.categoria) return false;
+                if (!palabras.length) return true;
+                const texto = normalizar(`${p.nombre} ${p.codigo} ${p.descripcion}`);
+                return palabras.every(w => texto.includes(w));
+            });
+        }
+
+        function miniatura(p) {
+            return p.imagen
+                ? `<img class="thumb" src="${escapar(p.imagen)}" alt="" loading="lazy" onerror="this.outerHTML='<span class=&quot;thumb&quot;><i class=&quot;fas fa-spray-can&quot;></i></span>'">`
+                : '<span class="thumb"><i class="fas fa-spray-can"></i></span>';
+        }
+
+        function estadoHTML(p) {
+            return `<span class="status ${p.estado === 'Activo' ? 'activo' : 'inactivo'}">${escapar(p.estado)}</span>`;
+        }
+
+        function botonesAccion(p) {
+            return `<div class="actions">
+                <a class="btn btn-sm btn-edit" href="#/editar/${p.id}"><i class="fas fa-pen"></i> Editar</a>
+                <button type="button" class="btn btn-sm btn-del" data-eliminar="${p.id}"><i class="fas fa-trash-alt"></i> Eliminar</button>
+            </div>`;
+        }
+
+        function pintarLista() {
+            $('meta-guardados').innerHTML = `<strong>${productos.length}</strong> ${productos.length === 1 ? 'producto guardado' : 'productos guardados'}`;
+
+            if (!productos.length) {
+                $('pager').hidden = true;
+                const n = (window.CATALOGO_INICIAL || []).length;
+                $('lista-contenido').innerHTML = `
+                    <div class="empty">
+                        <i class="fas fa-box-open"></i>
+                        <h3>Tu catálogo está vacío</h3>
+                        <p>Registra tu primer producto o importa el catálogo que ya tenía la página.</p>
+                        ${n ? `<div class="import-box">
+                            <div class="field">
+                                <label for="import-cantidad">Cantidad inicial para cada producto</label>
+                                <input type="text" id="import-cantidad" inputmode="numeric" value="10">
+                                <p class="hint">Luego puedes ajustar las existencias de cada uno con Editar.</p>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="btn-importar" style="width:100%"><i class="fas fa-file-import"></i> Importar catálogo actual (${n} productos)</button>
+                        </div>` : ''}
+                    </div>`;
+                const btn = $('btn-importar');
+                if (btn) btn.addEventListener('click', importarCatalogo);
+                return;
+            }
+
+            const lista = filtrados();
+            const paginas = Math.max(1, Math.ceil(lista.length / POR_PAGINA));
+            filtro.pagina = Math.min(filtro.pagina, paginas);
+            const inicio = (filtro.pagina - 1) * POR_PAGINA;
+            const visibles = lista.slice(inicio, inicio + POR_PAGINA);
+
+            if (!visibles.length) {
+                $('lista-contenido').innerHTML = `<div class="empty"><i class="fas fa-search"></i><h3>Sin resultados</h3><p>No hay productos que coincidan con la búsqueda.</p></div>`;
+                $('pager').hidden = true;
+                return;
+            }
+
+            const filas = visibles.map(p => `
+                <tr>
+                    <td class="code">${escapar(p.codigo)}</td>
+                    <td><div class="prod-cell">${miniatura(p)}<div><div class="prod-name">${escapar(p.nombre)}</div><div class="prod-desc">${escapar(p.descripcion)}</div></div></div></td>
+                    <td>${escapar(p.categoria)}</td>
+                    <td class="num">${formatoCOP(p.precio)}</td>
+                    <td class="num ${p.cantidad === 0 ? 'qty-zero' : ''}">${p.cantidad}</td>
+                    <td>${estadoHTML(p)}</td>
+                    <td>${botonesAccion(p)}</td>
+                </tr>`).join('');
+
+            const tarjetas = visibles.map(p => `
+                <div class="m-card">
+                    <div class="m-top"><span class="code">${escapar(p.codigo)}</span>${estadoHTML(p)}</div>
+                    <div class="m-body">${miniatura(p)}<div>
+                        <div class="prod-name">${escapar(p.nombre)}</div>
+                        <div class="m-cat">${escapar(p.categoria)}</div>
+                        <div class="prod-desc">${escapar(p.descripcion)}</div>
+                    </div></div>
+                    <div class="m-bottom"><strong>${formatoCOP(p.precio)}</strong><span class="${p.cantidad === 0 ? 'qty-zero' : ''}">${p.cantidad} disponibles</span></div>
+                    ${botonesAccion(p)}
+                </div>`).join('');
+
+            $('lista-contenido').innerHTML = `
+                <div class="table-wrap"><table>
+                    <thead><tr><th>Código</th><th>Producto</th><th>Categoría</th><th>Precio (COP)</th><th>Cantidad</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody>${filas}</tbody>
+                </table></div>
+                <div class="mobile-list">${tarjetas}</div>`;
+
+            $('pager').hidden = false;
+            $('pager-info').textContent = `Mostrando ${inicio + 1}–${inicio + visibles.length} de ${lista.length} productos`;
+            pintarPaginas(paginas);
+        }
+
+        function pintarPaginas(total) {
+            const actual = filtro.pagina;
+            const numeros = new Set([1, total, actual - 1, actual, actual + 1].filter(n => n >= 1 && n <= total));
+            const orden = [...numeros].sort((a, b) => a - b);
+            let html = `<button type="button" data-pagina="${actual - 1}" ${actual === 1 ? 'disabled' : ''} aria-label="Anterior"><i class="fas fa-chevron-left"></i></button>`;
+            orden.forEach((n, i) => {
+                if (i && n - orden[i - 1] > 1) html += '<button type="button" disabled>…</button>';
+                html += `<button type="button" data-pagina="${n}" class="${n === actual ? 'active' : ''}">${n}</button>`;
+            });
+            html += `<button type="button" data-pagina="${actual + 1}" ${actual === total ? 'disabled' : ''} aria-label="Siguiente"><i class="fas fa-chevron-right"></i></button>`;
+            $('pages').innerHTML = html;
+        }
+
+        $('pages').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-pagina]');
+            if (!b || b.disabled) return;
+            filtro.pagina = Number(b.dataset.pagina);
+            pintarLista();
+            $('vista-lista').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        let tBuscar;
+        $('buscar').addEventListener('input', (e) => {
+            clearTimeout(tBuscar);
+            tBuscar = setTimeout(() => { filtro.texto = e.target.value; filtro.pagina = 1; pintarLista(); }, 120);
+        });
+
+        document.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click', () => {
+            document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === chip));
+            filtro.categoria = chip.dataset.cat;
+            filtro.pagina = 1;
+            pintarLista();
+        }));
+
+        // ========== IMPORTAR CATÁLOGO INICIAL ==========
+        async function importarCatalogo() {
+            const valor = $('import-cantidad').value.trim();
+            if (!/^\d+$/.test(valor)) { aviso('La cantidad inicial debe ser un número entero desde 0.', 'error'); return; }
+            const cantidad = parseInt(valor, 10);
+            const btn = $('btn-importar');
+            btn.disabled = true;
+            const existentes = new Set(productos.map(p => p.codigo));
+            const filas = window.CATALOGO_INICIAL
+                .filter(p => !existentes.has(p.codigo))
+                .map(p => ({ ...p, cantidad, estado: 'Activo', etiqueta: p.etiqueta || null }));
+            try {
+                for (let i = 0; i < filas.length; i += 100) {
+                    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Importando ${Math.min(i + 100, filas.length)} de ${filas.length}…`;
+                    const { error } = await db.from('productos').insert(filas.slice(i, i + 100));
+                    if (error) throw error;
+                }
+                aviso(`Se importaron ${filas.length} productos.`);
+            } catch (e) {
+                console.error(e);
+                aviso('No se pudo completar la importación: ' + (e.message || 'error desconocido'), 'error');
+            }
+            await cargarProductos();
+        }
+
+        // ========== FORMULARIO ==========
+        function siguienteCodigo(categoria) {
+            const prefijo = PREFIJOS[categoria];
+            if (!prefijo) return '';
+            let max = 0;
+            productos.forEach(p => {
+                const m = String(p.codigo).match(new RegExp('^' + prefijo + '(\\d+)$'));
+                if (m) max = Math.max(max, parseInt(m[1], 10));
+            });
+            return prefijo + String(max + 1).padStart(3, '0');
+        }
+
+        function nombreArchivo(url) {
+            if (!url) return '';
+            try { return decodeURIComponent(url.split('?')[0].split('/').pop()); } catch (e) { return url; }
+        }
+
+        function pintarImagen() {
+            const actual = editando && !quitarImagen ? editando.imagen : '';
+            const nombre = $('f-imagen-nombre');
+            const preview = $('f-preview');
+            if (archivoImagen) {
+                nombre.textContent = archivoImagen.name;
+                nombre.classList.remove('vacio');
+                $('f-imagen-hint').textContent = `${(archivoImagen.size / 1024 / 1024).toFixed(1)} MB · se optimizará al guardar`;
+                preview.innerHTML = `<img class="file-preview" src="${URL.createObjectURL(archivoImagen)}" alt="">`;
+            } else if (actual) {
+                nombre.textContent = nombreArchivo(actual);
+                nombre.classList.remove('vacio');
+                $('f-imagen-hint').textContent = 'Imagen asociada al producto';
+                preview.innerHTML = `<img class="file-preview" src="${escapar(actual)}" alt="">`;
+            } else {
+                nombre.textContent = 'Ningún archivo seleccionado';
+                nombre.classList.add('vacio');
+                $('f-imagen-hint').textContent = 'JPG o PNG · Máximo 5 MB';
+                preview.innerHTML = '<i class="fas fa-image"></i>';
+            }
+            const hayImagen = Boolean(archivoImagen || actual);
+            $('f-imagen-btn').textContent = hayImagen ? 'Cambiar imagen' : 'Elegir imagen';
+            $('f-quitar-imagen').hidden = !hayImagen;
+        }
+
+        function abrirFormulario(p) {
+            editando = p;
+            archivoImagen = null;
+            quitarImagen = false;
+            limpiarErrores();
+            $('form-producto').reset();
+            $('f-imagen').value = '';
+
+            const nuevo = !p;
+            $('form-titulo').textContent = nuevo ? 'Registrar producto' : 'Editar producto';
+            $('form-subtitulo').textContent = nuevo
+                ? 'Añade una nueva fragancia al catálogo de MELNE.'
+                : `${p.nombre.trim()} · Actualiza los datos del registro ${p.codigo}.`;
+            $('pill-editando').hidden = nuevo;
+            $('btn-guardar').textContent = nuevo ? 'Registrar producto' : 'Guardar cambios';
+            $('tip-titulo').textContent = nuevo ? 'Antes de guardar' : 'Cuida cada detalle';
+            $('tip-texto').textContent = nuevo
+                ? 'Revisa el código, la categoría y las notas aromáticas para mantener un catálogo claro.'
+                : `Estás actualizando ${p.nombre.trim()}, código ${p.codigo}. Revisa los datos antes de guardar los cambios.`;
+
+            if (p) {
+                $('f-codigo').value = p.codigo;
+                $('f-nombre').value = p.nombre;
+                $('f-categoria').value = p.categoria;
+                $('f-descripcion').value = p.descripcion;
+                $('f-precio').value = p.precio;
+                $('f-cantidad').value = p.cantidad;
+                $('f-estado').value = p.estado;
+                $('f-etiqueta').value = p.etiqueta || '';
+            }
+            codigoSugerido = '';
+            pintarImagen();
+            mostrarSeccion('form');
+        }
+
+        // Sugerir el siguiente código al elegir la categoría (solo en registros nuevos).
+        $('f-categoria').addEventListener('change', () => {
+            if (editando) return;
+            const codigo = $('f-codigo');
+            if (!codigo.value.trim() || codigo.value === codigoSugerido) {
+                codigoSugerido = siguienteCodigo($('f-categoria').value);
+                codigo.value = codigoSugerido;
+            }
+        });
+        $('f-codigo').addEventListener('blur', (e) => { e.target.value = e.target.value.trim().toUpperCase(); });
+
+        $('f-imagen').addEventListener('change', (e) => {
+            const archivo = e.target.files[0];
+            if (!archivo) return;
+            const error = validarArchivo(archivo);
+            marcarCampo('imagen', error);
+            if (error) { e.target.value = ''; return; }
+            archivoImagen = archivo;
+            quitarImagen = false;
+            pintarImagen();
+        });
+        $('f-quitar-imagen').addEventListener('click', () => {
+            archivoImagen = null;
+            $('f-imagen').value = '';
+            if (editando && editando.imagen) quitarImagen = true;
+            pintarImagen();
+        });
+
+        // Quitar el error de un campo apenas el usuario lo corrige.
+        document.querySelectorAll('#form-producto input, #form-producto select, #form-producto textarea').forEach(el => {
+            el.addEventListener('input', () => {
+                const campo = el.closest('.field');
+                if (campo && campo.classList.contains('invalid') && el.type !== 'file') campo.classList.remove('invalid');
+            });
+        });
+
+        function validarArchivo(archivo) {
+            if (!['image/jpeg', 'image/png'].includes(archivo.type)) return 'Usa una imagen JPG o PNG.';
+            if (archivo.size > MAX_BYTES) return 'La imagen pesa más de 5 MB. Elige una más liviana.';
+            return '';
+        }
+
+        function leerPrecio(texto) {
+            const limpio = texto.replace(/[\s$]/g, '');
+            if (/^\d+$/.test(limpio) || /^\d{1,3}(\.\d{3})+$/.test(limpio)) return parseInt(limpio.replace(/\./g, ''), 10);
+            return NaN;
+        }
+
+        const RESUMEN = {
+            codigo: 'Código',
+            nombre: 'Nombre',
+            categoria: 'Categoría',
+            descripcion: 'Descripción',
+            precio: 'Precio',
+            cantidad: 'Cantidad',
+            imagen: 'Imagen',
+            estado: 'Estado'
+        };
+
+        function validar() {
+            const v = {
+                codigo: $('f-codigo').value.trim().toUpperCase(),
+                nombre: $('f-nombre').value.trim(),
+                categoria: $('f-categoria').value,
+                descripcion: $('f-descripcion').value.trim(),
+                precioTexto: $('f-precio').value.trim(),
+                cantidadTexto: $('f-cantidad').value.trim(),
+                estado: $('f-estado').value,
+                etiqueta: $('f-etiqueta').value.trim()
+            };
+            const errores = [];
+            const agregar = (campo, mensaje, resumen) => errores.push({ campo, mensaje, resumen });
+
+            if (!v.codigo) agregar('codigo', 'Escribe el código del producto.', 'escribe un código único.');
+            else if (productos.some(p => p.codigo.toUpperCase() === v.codigo && (!editando || p.id !== editando.id)))
+                agregar('codigo', 'Ese código ya está registrado. Usa otro.', 'ya existe otro producto con ese código.');
+
+            if (!v.nombre) agregar('nombre', 'Escribe el nombre del producto.', 'escribe el nombre del producto.');
+            if (!PREFIJOS[v.categoria]) agregar('categoria', 'Selecciona Hombre, Mujer o Lujo.', 'selecciona una opción.');
+            if (!v.descripcion) agregar('descripcion', 'Describe las notas de la fragancia.', 'describe las notas aromáticas.');
+
+            v.precio = leerPrecio(v.precioTexto);
+            if (!(v.precio > 0)) agregar('precio', 'Ingresa un precio mayor que 0 COP.', 'debe ser mayor que 0.');
+
+            v.cantidad = /^\d+$/.test(v.cantidadTexto) ? parseInt(v.cantidadTexto, 10) : NaN;
+            if (Number.isNaN(v.cantidad)) agregar('cantidad', 'Ingresa un entero igual o mayor que 0; no uses decimales.', 'usa un número entero desde 0.');
+
+            if (archivoImagen) {
+                const e = validarArchivo(archivoImagen);
+                if (e) agregar('imagen', e, 'usa un JPG o PNG de máximo 5 MB.');
+            }
+            if (!['Activo', 'Inactivo'].includes(v.estado)) agregar('estado', 'Selecciona Activo o Inactivo.', 'selecciona una opción.');
+
+            return { v, errores };
+        }
+
+        function marcarCampo(campo, mensaje) {
+            const el = document.querySelector(`.field[data-field="${campo}"]`);
+            if (!el) return;
+            el.classList.toggle('invalid', Boolean(mensaje));
+            const err = $('e-' + campo);
+            if (err) err.textContent = mensaje || '';
+        }
+
+        function limpiarErrores() {
+            document.querySelectorAll('#form-producto .field.invalid').forEach(f => f.classList.remove('invalid'));
+            $('error-summary').hidden = true;
+        }
+
+        function mostrarErrores(errores) {
+            limpiarErrores();
+            errores.forEach(e => marcarCampo(e.campo, e.mensaje));
+            const n = errores.length;
+            $('error-titulo').textContent = editando ? 'No se pudieron guardar los cambios' : 'No se pudo registrar el producto';
+            $('error-conteo').textContent = `Corrige ${n === 1 ? 'este campo' : `estos ${n} campos`} para continuar:`;
+            $('error-lista').innerHTML = errores
+                .map(e => `<li><a href="#f-${e.campo}" data-ir="${e.campo}">${RESUMEN[e.campo]}</a>: ${escapar(e.resumen)}</li>`)
+                .join('');
+            $('error-pie').textContent = editando
+                ? `Los demás datos se conservan. El registro ${editando.nombre.trim()} no se ha modificado.`
+                : 'Los demás datos ingresados se conservan.';
+            $('error-summary').hidden = false;
+            $('error-summary').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            $('error-summary').focus({ preventScroll: true });
+        }
+
+        $('error-lista').addEventListener('click', (e) => {
+            const a = e.target.closest('[data-ir]');
+            if (!a) return;
+            e.preventDefault();
+            const campo = a.dataset.ir;
+            const control = campo === 'imagen' ? $('f-imagen-btn') : $('f-' + campo);
+            control.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            control.focus({ preventScroll: true });
+        });
+
+        // Reduce la foto (máx. 1000 px, JPG) para que la tienda cargue rápido.
+        async function optimizarImagen(archivo) {
+            try {
+                const bitmap = await createImageBitmap(archivo);
+                const escala = Math.min(1, 1000 / Math.max(bitmap.width, bitmap.height));
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(bitmap.width * escala);
+                canvas.height = Math.round(bitmap.height * escala);
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+                const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.85));
+                return blob && blob.size < archivo.size ? { blob, tipo: 'image/jpeg', ext: 'jpg' } : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function subirImagen(archivo, codigo) {
+            const optimizada = await optimizarImagen(archivo);
+            const blob = optimizada ? optimizada.blob : archivo;
+            const tipo = optimizada ? optimizada.tipo : archivo.type;
+            const ext = optimizada ? optimizada.ext : (archivo.type === 'image/png' ? 'png' : 'jpg');
+            const ruta = `${codigo.toLowerCase().replace(/[^a-z0-9-]/g, '')}-${Date.now()}.${ext}`;
+            const { error } = await db.storage.from(BUCKET).upload(ruta, blob, { contentType: tipo, cacheControl: '31536000' });
+            if (error) throw error;
+            return db.storage.from(BUCKET).getPublicUrl(ruta).data.publicUrl;
+        }
+
+        // Ruta dentro del bucket si la imagen fue subida desde el panel; null si es una imagen del sitio.
+        function rutaEnBucket(url) {
+            const marca = `/storage/v1/object/public/${BUCKET}/`;
+            const i = url ? url.indexOf(marca) : -1;
+            return i === -1 ? null : decodeURIComponent(url.slice(i + marca.length).split('?')[0]);
+        }
+
+        async function borrarImagenSiNoSeUsa(url, idExcluido) {
+            const ruta = rutaEnBucket(url);
+            if (!ruta) return;
+            if (productos.some(p => p.imagen === url && p.id !== idExcluido)) return;
+            const { error } = await db.storage.from(BUCKET).remove([ruta]);
+            if (error) console.warn('No se pudo borrar la imagen anterior:', error);
+        }
+
+        $('form-producto').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const { v, errores } = validar();
+            if (errores.length) { mostrarErrores(errores); return; }
+            limpiarErrores();
+
+            const btn = $('btn-guardar');
+            const textoBtn = btn.textContent;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando…';
+
+            let urlNueva = null;
+            try {
+                const anterior = editando ? editando.imagen : null;
+                let imagen = editando && !quitarImagen ? editando.imagen : null;
+                if (archivoImagen) {
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo imagen…';
+                    urlNueva = await subirImagen(archivoImagen, v.codigo);
+                    imagen = urlNueva;
+                }
+
+                const fila = {
+                    codigo: v.codigo,
+                    nombre: v.nombre,
+                    categoria: v.categoria,
+                    descripcion: v.descripcion,
+                    precio: v.precio,
+                    cantidad: v.cantidad,
+                    imagen,
+                    etiqueta: v.etiqueta || null,
+                    estado: v.estado
+                };
+
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando…';
+                const consulta = editando
+                    ? db.from('productos').update(fila).eq('id', editando.id)
+                    : db.from('productos').insert(fila);
+                const { data, error } = await consulta.select().single();
+                if (error) throw error;
+
+                if (editando) {
+                    productos = productos.map(p => p.id === data.id ? data : p);
+                    if (anterior && anterior !== imagen) await borrarImagenSiNoSeUsa(anterior, data.id);
+                    aviso('Cambios guardados.');
+                } else {
+                    productos.push(data);
+                    aviso('Producto registrado.');
+                }
+                editando = null;
+                location.hash = '#/productos';
+            } catch (err) {
+                console.error(err);
+                if (urlNueva) await borrarImagenSiNoSeUsa(urlNueva, null);
+                if (err && err.code === '23505') {
+                    mostrarErrores([{ campo: 'codigo', mensaje: 'Ese código ya está registrado. Usa otro.', resumen: 'ya existe otro producto con ese código.' }]);
+                } else {
+                    aviso('No se pudo guardar: ' + (err.message || 'revisa tu conexión.'), 'error');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.textContent = textoBtn;
+            }
+        });
+
+        // ========== ELIMINAR ==========
+        function abrirEliminar(p) {
+            porEliminar = p;
+            $('del-producto').innerHTML = `
+                <strong>${escapar(p.nombre)}</strong>
+                <div class="meta">${escapar(p.codigo)} · ${escapar(p.categoria)} · ${escapar(p.estado)}</div>
+                <div class="desc">${escapar(p.descripcion)}</div>
+                <div class="stock">COP ${formatoCOP(p.precio)} · ${p.cantidad} ${p.cantidad === 1 ? 'unidad disponible' : 'unidades disponibles'}</div>`;
+            $('modal-eliminar').classList.add('open');
+            $('modal-eliminar').setAttribute('aria-hidden', 'false');
+            document.body.classList.add('no-scroll');
+            $('del-cancelar').focus();
+        }
+
+        function cerrarEliminar() {
+            porEliminar = null;
+            $('modal-eliminar').classList.remove('open');
+            $('modal-eliminar').setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('no-scroll');
+        }
+
+        $('lista-contenido').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-eliminar]');
+            if (!b) return;
+            const p = productos.find(x => String(x.id) === b.dataset.eliminar);
+            if (p) abrirEliminar(p);
+        });
+        $('del-cancelar').addEventListener('click', cerrarEliminar);
+        $('modal-eliminar').addEventListener('click', (e) => { if (e.target.id === 'modal-eliminar') cerrarEliminar(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && $('modal-eliminar').classList.contains('open')) cerrarEliminar();
+        });
+
+        $('del-confirmar').addEventListener('click', async () => {
+            if (!porEliminar) return;
+            const p = porEliminar;
+            const btn = $('del-confirmar');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando…';
+            const { error } = await db.from('productos').delete().eq('id', p.id);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-trash-alt"></i> Eliminar producto';
+            if (error) { aviso('No se pudo eliminar: ' + error.message, 'error'); return; }
+            productos = productos.filter(x => x.id !== p.id);
+            await borrarImagenSiNoSeUsa(p.imagen, p.id);
+            cerrarEliminar();
+            pintarLista();
+            aviso(`${p.nombre.trim()} fue eliminado.`);
+        });
+
+        // Si la sesión se cierra desde otra pestaña.
+        if (db) {
+            db.auth.onAuthStateChange((evento) => {
+                if (evento === 'SIGNED_OUT') mostrarVista('login');
+            });
+        }
+
+        iniciar();
+    </script>
+</body>
+</html>
